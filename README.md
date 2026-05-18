@@ -5,8 +5,8 @@
 
 ## 🗂️ 프로젝트 관리
 
-# **[🦜 Wiki](https://github.com/qbsb147/React/wiki)**: 코드 설명, 개념, 동작 원리 등을 정리
-# **[🐴 GitHub Projects](https://github.com/users/qbsb147/projects/4/views/1)**: 진행 단계와 작업 상태를 시각화
+### **[🦜 Wiki](https://github.com/qbsb147/React/wiki)**: 코드 설명, 개념, 동작 원리 등을 정리
+### **[🐴 GitHub Projects](https://github.com/users/qbsb147/projects/4/views/1)**: 진행 단계와 작업 상태를 시각화
 
 ## 📌 학습 목표
 
