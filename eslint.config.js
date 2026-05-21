@@ -17,5 +17,14 @@ export default defineConfig([
       globals: globals.browser,
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
+    ignores: [
+      'node_modules',
+      'dist',
+      'build',
+      '.eslintrc.js',
+      'vite.config.js',
+      'webpack.config.js',
+    ],
   },
+  
 ])

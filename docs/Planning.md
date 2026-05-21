@@ -55,31 +55,46 @@
 
 ## 2. 상세 기능 명세서 (기능 목록) 🧾
 
-1. 대시 보드 Overview 📈
+1. 대시 보드 Overview 📈  
+KPI 카드 :  
+![img.png](img.png)
     - 하루 사용자 수
+      - KPI 카드로 전날 대비 변화율을 나타낸다.
+   
     - 한달 사용자 수
+       - 이번달 1~오늘
+       - 지난달 1~같은 날짜 비교
+       - KPI로 비교해서 차이를 확인함
     - 총 이벤트 수
-    - 전환율 <구매 / 방문>
-2. 날짜 범위 필터 📅
+       - 단순 수치로 나타냄
+2. 신규 / 재방문 유저 비율(users)
+   - 도넛 차트
+2. 전환율 <구매 / 방문>(users)
+   - 전월 동일 기간 대비 전환율
+   - KPI 카드로 나타냄
+2. 날짜 범위 필터 📅 (Sidebar)
     - 시작일, 종료일 범위 선택
-3. 이벤트 타입 필터 🔘
-    
-    체크 박스 여러개 선택 가능
-    
+3. 이벤트 타입 필터 🔘 (Sidebar)
+    - 체크 박스 여러개 선택 가능
     - page_view / click / purchase
-4. 어떤 유저 그룹만 볼지 선택 👥
+4. 어떤 유저 그룹만 볼지 선택 👥 (Sidebar)
     - 신규 유저
     - 재방문 유저
-5. 이벤트 트렌드 차트 📊
-    - 시간별 이벤트 발생량 라인 차트
-6. 이벤트 분포 차트 🥧
-    - VIEW / CLICK / PURCHASE 비율
-    - 파이 차트
-7. 상위 페이지 차트 📉
+5. 이벤트 트렌드 차트 📊 (events)
+![img_1.png](img_1.png)
+    - 시간별 이벤트 발생량 차트
+    - 이벤트 타입별(VIEW / CLICK / PURCHASE)  
+   -> 멀티 라인 차트
+6. 이벤트 분포 차트 🥧 (events)
+![img_2.png](img_2.png)
+    - VIEW / CLICK / PURCHASE
+    - 퍼널 차트 VIEW > CLICK > PURCHASE를 통해
+    - 사용자 유입 흐름을 파악할 수 있음
+7. 상위 페이지 차트 📉 (users)
     - 방문 수 기준 정렬
     - 상위 5만 표시
     - 바 차트
-8. 데이터 원본 리스트 📄
+8. 데이터 원본 리스트 📄 (events)
     - 이벤트 로그 나열
     - 필터 적용된 결과만 보여줌
     - 페이지 나눔
@@ -92,18 +107,14 @@ UI 흐름 및 화면 전환
 | **화면** | **라우트** | **주요 컴포넌트** |
 | --- | --- | --- |
 | Overview | / | 핵심 지표 카드(KpiCard) × 4 : 하루 사용자 수, 한달 사용자 수, 총 이벤트 수, 전환율
-추세 선 그래프(TrendLineChart) : 이벤트 트렌드
-이벤트 비율 원형 그래프(EventPieChart) : 이벤트 분포 |
-| 사용자 분석 | /users | 사용자 구분 그래프(UserSegmentChart) : 신규 / 재방문 유저 구분
-재방문율 표(RetentionTable)
-상위 사용자 목록(TopUserList) |
-| 이벤트 분석 | /events | 이벤트 막대 그래프(EventBarChart) : 시간별 이벤트 발생량, 상위 페이지 TOP5
-이벤트 상세 표(EventDetailTable) : 이벤트 로그 리스트
-Pagination |
-| (공통) 필터 패널 | Sidebar 고정 | 날짜 범위 선택기(DateRangePicker)
-이벤트 종류 필터(EventTypeFilter)
-사용자 그룹 필터(SegmentFilter)
-필터 초기화(FilterResetButton) |
+
+
+| 구분         | 경로      | 구성                                                                                                                                                                                |
+| ---------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **대시보드**   | /       | **KpiCard × 4** (하루 사용자 수, 한달 사용자 수, 총 이벤트 수, 전환율)<br>**TrendLineChart** (이벤트 트렌드, 멀티 라인)<br>**FunnelChart** (VIEW → CLICK → PURCHASE 전환 흐름)<br>**TopPageBarChart** (상위 페이지 TOP5) |
+| **사용자 분석** | /users  | **UserSegmentChart** (신규 / 재방문 비율)<br>**RetentionTable** (재방문율)<br>**TopUserList** (상위 사용자)                                                                                       |
+| **이벤트 분석** | /events | **EventBarChart** (시간별 이벤트 발생량, 스택 또는 그룹 바)<br>**TopPageBarChart** (상위 페이지 TOP5)<br>**EventDetailTable** (이벤트 로그)<br>**Pagination**                                               |
+| **공통 필터**  | Sidebar | **DateRangePicker** (날짜 범위)<br>**EventTypeFilter** (page_view / click / purchase)<br>**SegmentFilter** (신규 / 재방문)<br>**FilterResetButton**                                        |
 
 ## 페이지 별로 적용되는 필터 ⚙️
 
