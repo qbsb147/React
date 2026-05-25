@@ -1,0 +1,260 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.shell{display:flex;height:660px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-tertiary)}
+.sidebar{width:200px;min-width:200px;background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column}
+.sidebar-logo{padding:14px 16px 10px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.logo-mark{display:flex;align-items:center;gap:8px}
+.logo-icon{width:26px;height:26px;border-radius:7px;background:#185FA5;display:flex;align-items:center;justify-content:center}
+.logo-icon i{font-size:14px;color:#E6F1FB}
+.logo-text{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.nav-section{padding:10px 10px 0}
+.nav-label{font-size:10px;color:var(--color-text-tertiary);letter-spacing:.06em;text-transform:uppercase;padding:0 6px 4px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--border-radius-md);cursor:pointer;font-size:13px;color:var(--color-text-secondary);margin-bottom:1px}
+.nav-item.active{background:#E6F1FB;color:#185FA5}
+.nav-item.active i{color:#185FA5}
+.nav-item i{font-size:16px;color:var(--color-text-tertiary)}
+.filter-section{padding:12px 14px;border-top:0.5px solid var(--color-border-tertiary);flex:1}
+.filter-title{font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.filter-group{margin-bottom:14px}
+.filter-label{font-size:11px;color:var(--color-text-tertiary);margin-bottom:5px}
+.date-input{width:100%;font-size:11px;padding:5px 8px;border:0.5px solid var(--color-border-secondary);border-radius:6px;background:var(--color-background-secondary);color:var(--color-text-primary);margin-bottom:4px}
+.check-row{display:flex;align-items:center;gap:6px;margin-bottom:4px;cursor:pointer}
+.check-box{width:13px;height:13px;border-radius:3px;border:1.5px solid #378ADD;background:#E6F1FB;display:flex;align-items:center;justify-content:center}
+.check-box.checked{background:#185FA5;border-color:#185FA5}
+.check-box i{font-size:9px;color:#E6F1FB}
+.check-text{font-size:11px;color:var(--color-text-secondary)}
+.reset-btn{width:100%;padding:6px;font-size:11px;border:0.5px solid var(--color-border-secondary);border-radius:6px;background:transparent;color:var(--color-text-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;margin-top:4px}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{padding:12px 18px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);display:flex;align-items:center;justify-content:space-between}
+.page-title{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.page-sub{font-size:11px;color:var(--color-text-tertiary);margin-top:1px}
+.badge{font-size:10px;padding:3px 8px;border-radius:20px;background:#E6F1FB;color:#185FA5;font-weight:500}
+.icon-btn{width:28px;height:28px;border-radius:6px;border:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.icon-btn i{font-size:15px;color:var(--color-text-secondary)}
+.content{flex:1;overflow-y:auto;padding:14px 16px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:10px}
+.chart-title{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.row2{display:grid;grid-template-columns:1.5fr 1fr;gap:10px;margin-bottom:10px}
+.ev-badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500}
+.ev-view{background:#E6F1FB;color:#0C447C}
+.ev-click{background:#EAF3DE;color:#27500A}
+.ev-purchase{background:#FAEEDA;color:#633806}
+.pg-btn{width:26px;height:26px;border:0.5px solid var(--color-border-secondary);border-radius:5px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:11px;color:var(--color-text-secondary)}
+.pg-btn.active{background:#185FA5;color:#E6F1FB;border-color:#185FA5}
+</style>
+
+<div class="shell">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <div class="logo-icon"><i class="ti ti-chart-dots" aria-hidden="true"></i></div>
+        <span class="logo-text">ShopAnalytics</span>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">메뉴</div>
+      <div class="nav-item"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Overview</div>
+      <div class="nav-item"><i class="ti ti-users" aria-hidden="true"></i> 사용자 분석</div>
+      <div class="nav-item active"><i class="ti ti-bolt" aria-hidden="true"></i> 이벤트 분석</div>
+      <div class="nav-item"><i class="ti ti-shopping-bag" aria-hidden="true"></i> 쇼핑몰</div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-title"><i class="ti ti-adjustments-horizontal" aria-hidden="true" style="font-size:13px"></i> 필터</div>
+      <div class="filter-group">
+        <div class="filter-label">날짜 범위</div>
+        <input class="date-input" type="text" value="2025-05-01" readonly>
+        <input class="date-input" type="text" value="2025-05-31" readonly>
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">이벤트 타입</div>
+        <label class="check-row"><div class="check-box checked"><i class="ti ti-check"></i></div><span class="check-text">page_view</span></label>
+        <label class="check-row"><div class="check-box checked"><i class="ti ti-check"></i></div><span class="check-text">click</span></label>
+        <label class="check-row"><div class="check-box"><i class="ti ti-check"></i></div><span class="check-text">purchase</span></label>
+      </div>
+      <button class="reset-btn"><i class="ti ti-refresh" aria-hidden="true" style="font-size:12px"></i> 필터 초기화</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="page-title">이벤트 분석</div>
+        <div class="page-sub">이벤트 발생 집계 · 로그 상세</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="badge">/events</span>
+        <div class="icon-btn"><i class="ti ti-download" aria-hidden="true"></i></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="row2">
+        <div class="card" style="margin-bottom:0">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <span class="chart-title">시간별 이벤트 발생량</span>
+            <div style="display:flex;gap:8px">
+              <span style="font-size:10px;color:var(--color-text-tertiary);display:flex;align-items:center;gap:3px"><span style="width:8px;height:8px;border-radius:2px;background:#185FA5;display:inline-block"></span>view</span>
+              <span style="font-size:10px;color:var(--color-text-tertiary);display:flex;align-items:center;gap:3px"><span style="width:8px;height:8px;border-radius:2px;background:#97C459;display:inline-block"></span>click</span>
+            </div>
+          </div>
+          <svg width="100%" viewBox="0 0 280 120">
+            <line x1="28" y1="10" x2="272" y2="10" stroke="var(--color-border-tertiary)" stroke-width="0.5"/>
+            <line x1="28" y1="40" x2="272" y2="40" stroke="var(--color-border-tertiary)" stroke-width="0.5"/>
+            <line x1="28" y1="70" x2="272" y2="70" stroke="var(--color-border-tertiary)" stroke-width="0.5"/>
+            <line x1="28" y1="100" x2="272" y2="100" stroke="var(--color-border-tertiary)" stroke-width="0.5"/>
+            <text x="22" y="13" text-anchor="end" style="font-size:8px;fill:var(--color-text-tertiary)">1k</text>
+            <text x="22" y="43" text-anchor="end" style="font-size:8px;fill:var(--color-text-tertiary)">600</text>
+            <text x="22" y="73" text-anchor="end" style="font-size:8px;fill:var(--color-text-tertiary)">300</text>
+            <rect x="32" y="60" width="10" height="40" rx="2" fill="#185FA5" opacity="0.85"/>
+            <rect x="32" y="78" width="10" height="22" rx="2" fill="#97C459" opacity="0.85"/>
+            <rect x="52" y="50" width="10" height="50" rx="2" fill="#185FA5" opacity="0.85"/>
+            <rect x="52" y="72" width="10" height="28" rx="2" fill="#97C459" opacity="0.85"/>
+            <rect x="72" y="30" width="10" height="70" rx="2" fill="#185FA5" opacity="0.85"/>
+            <rect x="72" y="58" width="10" height="42" rx="2" fill="#97C459" opacity="0.85"/>
+            <rect x="92" y="20" width="10" height="80" rx="2" fill="#185FA5" opacity="0.85"/>
+            <rect x="92" y="48" width="10" height="52" rx="2" fill="#97C459" opacity="0.85"/>
+            <rect x="112" y="35" width="10" height="65" rx="2" fill="#185FA5" opacity="0.85"/>
+            <rect x="112" y="58" width="10" height="42" rx="2" fill="#97C459" opacity="0.85"/>
+            <rect x="132" y="15" width="10" height="85" rx="2" fill="#185FA5" opacity="0.85"/>
+            <rect x="132" y="42" width="10" height="58" rx="2" fill="#97C459" opacity="0.85"/>
+            <rect x="152" y="25" width="10" height="75" rx="2" fill="#185FA5" opacity="0.85"/>
+            <rect x="152" y="52" width="10" height="48" rx="2" fill="#97C459" opacity="0.85"/>
+            <rect x="172" y="18" width="10" height="82" rx="2" fill="#185FA5" opacity="0.85"/>
+            <rect x="172" y="44" width="10" height="56" rx="2" fill="#97C459" opacity="0.85"/>
+            <rect x="192" y="40" width="10" height="60" rx="2" fill="#185FA5" opacity="0.85"/>
+            <rect x="192" y="62" width="10" height="38" rx="2" fill="#97C459" opacity="0.85"/>
+            <rect x="212" y="55" width="10" height="45" rx="2" fill="#185FA5" opacity="0.85"/>
+            <rect x="212" y="72" width="10" height="28" rx="2" fill="#97C459" opacity="0.85"/>
+            <rect x="232" y="65" width="10" height="35" rx="2" fill="#185FA5" opacity="0.85"/>
+            <rect x="232" y="80" width="10" height="20" rx="2" fill="#97C459" opacity="0.85"/>
+            <rect x="252" y="72" width="10" height="28" rx="2" fill="#185FA5" opacity="0.85"/>
+            <rect x="252" y="84" width="10" height="16" rx="2" fill="#97C459" opacity="0.85"/>
+            <text x="37" y="112" text-anchor="middle" style="font-size:7px;fill:var(--color-text-tertiary)">00시</text>
+            <text x="97" y="112" text-anchor="middle" style="font-size:7px;fill:var(--color-text-tertiary)">06시</text>
+            <text x="157" y="112" text-anchor="middle" style="font-size:7px;fill:var(--color-text-tertiary)">12시</text>
+            <text x="217" y="112" text-anchor="middle" style="font-size:7px;fill:var(--color-text-tertiary)">18시</text>
+            <text x="257" y="112" text-anchor="middle" style="font-size:7px;fill:var(--color-text-tertiary)">23시</text>
+          </svg>
+        </div>
+
+        <div class="card" style="margin-bottom:0">
+          <div style="margin-bottom:10px"><span class="chart-title">이벤트 타입 분포</span></div>
+          <div style="display:flex;flex-direction:column;gap:10px;padding:4px 0">
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                <span style="font-size:11px;color:var(--color-text-secondary)">page_view</span>
+                <span style="font-size:11px;font-weight:500;color:var(--color-text-primary)">204,893</span>
+              </div>
+              <div style="height:8px;border-radius:4px;background:var(--color-background-secondary)"><div style="height:100%;width:72%;border-radius:4px;background:#185FA5"></div></div>
+              <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:2px">전체의 72.1%</div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                <span style="font-size:11px;color:var(--color-text-secondary)">click</span>
+                <span style="font-size:11px;font-weight:500;color:var(--color-text-primary)">87,240</span>
+              </div>
+              <div style="height:8px;border-radius:4px;background:var(--color-background-secondary)"><div style="height:100%;width:25%;border-radius:4px;background:#97C459"></div></div>
+              <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:2px">전체의 25.4%</div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                <span style="font-size:11px;color:var(--color-text-secondary)">purchase</span>
+                <span style="font-size:11px;font-weight:500;color:var(--color-text-primary)">7,581</span>
+              </div>
+              <div style="height:8px;border-radius:4px;background:var(--color-background-secondary)"><div style="height:100%;width:3%;border-radius:4px;background:#EF9F27"></div></div>
+              <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:2px">전체의 2.5%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <span class="chart-title">이벤트 로그</span>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span style="font-size:10px;color:var(--color-text-tertiary)">총 292,133건</span>
+            <div style="display:flex;align-items:center;gap:2px;border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:3px 6px">
+              <i class="ti ti-search" aria-hidden="true" style="font-size:11px;color:var(--color-text-tertiary)"></i>
+              <span style="font-size:11px;color:var(--color-text-tertiary)">검색</span>
+            </div>
+          </div>
+        </div>
+        <table style="width:100%;font-size:11px;border-collapse:collapse;table-layout:fixed">
+          <thead>
+            <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+              <th style="text-align:left;padding:5px 6px;font-weight:500;color:var(--color-text-secondary);font-size:10px;width:18%">타임스탬프</th>
+              <th style="text-align:left;padding:5px 6px;font-weight:500;color:var(--color-text-secondary);font-size:10px;width:15%">사용자 ID</th>
+              <th style="text-align:left;padding:5px 6px;font-weight:500;color:var(--color-text-secondary);font-size:10px;width:16%">이벤트</th>
+              <th style="text-align:left;padding:5px 6px;font-weight:500;color:var(--color-text-secondary);font-size:10px;width:30%">페이지</th>
+              <th style="text-align:right;padding:5px 6px;font-weight:500;color:var(--color-text-secondary);font-size:10px;width:21%">세션 ID</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+              <td style="padding:6px 6px;color:var(--color-text-tertiary)">05-31 23:58</td>
+              <td style="padding:6px 6px;color:var(--color-text-primary)">user_1042</td>
+              <td style="padding:6px 6px"><span class="ev-badge ev-purchase">purchase</span></td>
+              <td style="padding:6px 6px;color:var(--color-text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">/checkout/confirm</td>
+              <td style="padding:6px 6px;text-align:right;color:var(--color-text-tertiary)">sess_9941</td>
+            </tr>
+            <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+              <td style="padding:6px 6px;color:var(--color-text-tertiary)">05-31 23:55</td>
+              <td style="padding:6px 6px;color:var(--color-text-primary)">user_2201</td>
+              <td style="padding:6px 6px"><span class="ev-badge ev-click">click</span></td>
+              <td style="padding:6px 6px;color:var(--color-text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">/products/item-304</td>
+              <td style="padding:6px 6px;text-align:right;color:var(--color-text-tertiary)">sess_8827</td>
+            </tr>
+            <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+              <td style="padding:6px 6px;color:var(--color-text-tertiary)">05-31 23:53</td>
+              <td style="padding:6px 6px;color:var(--color-text-primary)">user_0387</td>
+              <td style="padding:6px 6px"><span class="ev-badge ev-view">page_view</span></td>
+              <td style="padding:6px 6px;color:var(--color-text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">/products</td>
+              <td style="padding:6px 6px;text-align:right;color:var(--color-text-tertiary)">sess_7103</td>
+            </tr>
+            <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+              <td style="padding:6px 6px;color:var(--color-text-tertiary)">05-31 23:51</td>
+              <td style="padding:6px 6px;color:var(--color-text-primary)">user_0811</td>
+              <td style="padding:6px 6px"><span class="ev-badge ev-click">click</span></td>
+              <td style="padding:6px 6px;color:var(--color-text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">/cart</td>
+              <td style="padding:6px 6px;text-align:right;color:var(--color-text-tertiary)">sess_6654</td>
+            </tr>
+            <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+              <td style="padding:6px 6px;color:var(--color-text-tertiary)">05-31 23:48</td>
+              <td style="padding:6px 6px;color:var(--color-text-primary)">user_3342</td>
+              <td style="padding:6px 6px"><span class="ev-badge ev-view">page_view</span></td>
+              <td style="padding:6px 6px;color:var(--color-text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">/home</td>
+              <td style="padding:6px 6px;text-align:right;color:var(--color-text-tertiary)">sess_5219</td>
+            </tr>
+            <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+              <td style="padding:6px 6px;color:var(--color-text-tertiary)">05-31 23:45</td>
+              <td style="padding:6px 6px;color:var(--color-text-primary)">user_1553</td>
+              <td style="padding:6px 6px"><span class="ev-badge ev-purchase">purchase</span></td>
+              <td style="padding:6px 6px;color:var(--color-text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">/checkout/confirm</td>
+              <td style="padding:6px 6px;text-align:right;color:var(--color-text-tertiary)">sess_4882</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 6px;color:var(--color-text-tertiary)">05-31 23:41</td>
+              <td style="padding:6px 6px;color:var(--color-text-primary)">user_0099</td>
+              <td style="padding:6px 6px"><span class="ev-badge ev-click">click</span></td>
+              <td style="padding:6px 6px;color:var(--color-text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">/products/item-211</td>
+              <td style="padding:6px 6px;text-align:right;color:var(--color-text-tertiary)">sess_3340</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:0.5px solid var(--color-border-tertiary)">
+          <span style="font-size:11px;color:var(--color-text-tertiary)">1 – 7 / 292,133</span>
+          <div style="display:flex;gap:4px;align-items:center">
+            <div class="pg-btn"><i class="ti ti-chevron-left" style="font-size:11px"></i></div>
+            <div class="pg-btn active">1</div>
+            <div class="pg-btn">2</div>
+            <div class="pg-btn">3</div>
+            <span style="font-size:11px;color:var(--color-text-tertiary)">...</span>
+            <div class="pg-btn">41733</div>
+            <div class="pg-btn"><i class="ti ti-chevron-right" style="font-size:11px"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
