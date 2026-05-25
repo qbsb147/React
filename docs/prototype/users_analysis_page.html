@@ -1,0 +1,276 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.shell{display:flex;height:620px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-tertiary)}
+.sidebar{width:200px;min-width:200px;background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column}
+.sidebar-logo{padding:14px 16px 10px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.logo-mark{display:flex;align-items:center;gap:8px}
+.logo-icon{width:26px;height:26px;border-radius:7px;background:#185FA5;display:flex;align-items:center;justify-content:center}
+.logo-icon i{font-size:14px;color:#E6F1FB}
+.logo-text{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.nav-section{padding:10px 10px 0}
+.nav-label{font-size:10px;color:var(--color-text-tertiary);letter-spacing:.06em;text-transform:uppercase;padding:0 6px 4px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--border-radius-md);cursor:pointer;font-size:13px;color:var(--color-text-secondary);margin-bottom:1px}
+.nav-item:hover{background:var(--color-background-secondary)}
+.nav-item.active{background:#E6F1FB;color:#185FA5}
+.nav-item.active i{color:#185FA5}
+.nav-item i{font-size:16px;color:var(--color-text-tertiary)}
+.filter-section{padding:12px 14px;border-top:0.5px solid var(--color-border-tertiary);flex:1;overflow-y:auto}
+.filter-title{font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.filter-group{margin-bottom:14px}
+.filter-label{font-size:11px;color:var(--color-text-tertiary);margin-bottom:5px}
+.date-input{width:100%;font-size:11px;padding:5px 8px;border:0.5px solid var(--color-border-secondary);border-radius:6px;background:var(--color-background-secondary);color:var(--color-text-primary);margin-bottom:4px}
+.check-row{display:flex;align-items:center;gap:6px;margin-bottom:4px;cursor:pointer}
+.check-box{width:13px;height:13px;border-radius:3px;border:1.5px solid #378ADD;background:#E6F1FB;display:flex;align-items:center;justify-content:center}
+.check-box.checked{background:#185FA5;border-color:#185FA5}
+.check-box i{font-size:9px;color:#E6F1FB}
+.check-text{font-size:11px;color:var(--color-text-secondary)}
+.reset-btn{width:100%;padding:6px;font-size:11px;border:0.5px solid var(--color-border-secondary);border-radius:6px;background:transparent;color:var(--color-text-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;margin-top:4px}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{padding:12px 18px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);display:flex;align-items:center;justify-content:space-between}
+.page-title{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.page-sub{font-size:11px;color:var(--color-text-tertiary);margin-top:1px}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.badge{font-size:10px;padding:3px 8px;border-radius:20px;background:#E6F1FB;color:#185FA5;font-weight:500}
+.icon-btn{width:28px;height:28px;border-radius:6px;border:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.icon-btn i{font-size:15px;color:var(--color-text-secondary)}
+.content{flex:1;overflow-y:auto;padding:14px 16px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px 14px}
+.chart-title{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+.kpi-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:11px 13px;position:relative;overflow:hidden}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2.5px;background:#185FA5;border-radius:4px 4px 0 0}
+.kpi-card.teal::before{background:#0F6E56}
+.kpi-card.amber::before{background:#BA7517}
+.kpi-label{font-size:10px;color:var(--color-text-tertiary);margin-bottom:4px}
+.kpi-value{font-size:18px;font-weight:500;color:var(--color-text-primary);line-height:1;margin-bottom:3px}
+.kpi-delta{font-size:10px;display:flex;align-items:center;gap:3px}
+.kpi-delta.up{color:#3B6D11}
+.kpi-delta.down{color:#993C1D}
+.avatar{width:26px;height:26px;border-radius:50%;background:#E6F1FB;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#185FA5;flex-shrink:0}
+.tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:10px;background:#E6F1FB;color:#185FA5}
+.tag.new{background:#EAF3DE;color:#3B6D11}
+.tag.ret{background:#FAEEDA;color:#BA7517}
+.prog-bar{height:5px;border-radius:3px;background:var(--color-background-secondary);overflow:hidden;margin-top:3px}
+.prog-fill{height:100%;border-radius:3px}
+</style>
+
+<div class="shell">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <div class="logo-icon"><i class="ti ti-chart-dots" aria-hidden="true"></i></div>
+        <span class="logo-text">ShopAnalytics</span>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">메뉴</div>
+      <div class="nav-item"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Overview</div>
+      <div class="nav-item active"><i class="ti ti-users" aria-hidden="true"></i> 사용자 분석</div>
+      <div class="nav-item"><i class="ti ti-bolt" aria-hidden="true"></i> 이벤트 분석</div>
+      <div class="nav-item"><i class="ti ti-shopping-bag" aria-hidden="true"></i> 쇼핑몰</div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-title"><i class="ti ti-adjustments-horizontal" aria-hidden="true" style="font-size:13px"></i> 필터</div>
+      <div class="filter-group">
+        <div class="filter-label">날짜 범위</div>
+        <input class="date-input" type="text" value="2025-05-01" readonly>
+        <input class="date-input" type="text" value="2025-05-31" readonly>
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">사용자 그룹</div>
+        <label class="check-row"><div class="check-box checked"><i class="ti ti-check"></i></div><span class="check-text">신규 유저</span></label>
+        <label class="check-row"><div class="check-box checked"><i class="ti ti-check"></i></div><span class="check-text">재방문 유저</span></label>
+      </div>
+      <button class="reset-btn"><i class="ti ti-refresh" aria-hidden="true" style="font-size:12px"></i> 필터 초기화</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="page-title">사용자 분석</div>
+        <div class="page-sub">유저 행동 패턴 · 재방문율 · 상위 사용자</div>
+      </div>
+      <div class="topbar-right">
+        <span class="badge">/users</span>
+        <div class="icon-btn"><i class="ti ti-download" aria-hidden="true"></i></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="row3">
+        <div class="kpi-card">
+          <div class="kpi-label">총 사용자 수</div>
+          <div class="kpi-value">38,470</div>
+          <div class="kpi-delta up"><i class="ti ti-arrow-up" style="font-size:10px"></i> 전월 대비 +12.5%</div>
+        </div>
+        <div class="kpi-card teal">
+          <div class="kpi-label">재방문율</div>
+          <div class="kpi-value">38.0%</div>
+          <div class="kpi-delta up"><i class="ti ti-arrow-up" style="font-size:10px"></i> 전월 대비 +2.1%p</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">평균 세션 수</div>
+          <div class="kpi-value">3.2회</div>
+          <div class="kpi-delta down"><i class="ti ti-arrow-down" style="font-size:10px"></i> 전월 대비 -0.3회</div>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <span class="chart-title">신규 / 재방문 추이</span>
+            <div style="display:flex;gap:8px">
+              <span style="font-size:10px;color:var(--color-text-tertiary);display:flex;align-items:center;gap:3px"><span style="width:8px;height:8px;border-radius:2px;background:#185FA5;display:inline-block"></span>신규</span>
+              <span style="font-size:10px;color:var(--color-text-tertiary);display:flex;align-items:center;gap:3px"><span style="width:8px;height:8px;border-radius:2px;background:#85B7EB;display:inline-block"></span>재방문</span>
+            </div>
+          </div>
+          <svg width="100%" viewBox="0 0 260 110">
+            <line x1="28" y1="8" x2="252" y2="8" stroke="var(--color-border-tertiary)" stroke-width="0.5"/>
+            <line x1="28" y1="35" x2="252" y2="35" stroke="var(--color-border-tertiary)" stroke-width="0.5"/>
+            <line x1="28" y1="62" x2="252" y2="62" stroke="var(--color-border-tertiary)" stroke-width="0.5"/>
+            <line x1="28" y1="89" x2="252" y2="89" stroke="var(--color-border-tertiary)" stroke-width="0.5"/>
+            <text x="22" y="11" text-anchor="end" style="font-size:8px;fill:var(--color-text-tertiary)">5k</text>
+            <text x="22" y="38" text-anchor="end" style="font-size:8px;fill:var(--color-text-tertiary)">3k</text>
+            <text x="22" y="65" text-anchor="end" style="font-size:8px;fill:var(--color-text-tertiary)">2k</text>
+            <text x="22" y="92" text-anchor="end" style="font-size:8px;fill:var(--color-text-tertiary)">1k</text>
+            <path d="M28,72 L66,60 L104,52 L142,56 L180,42 L218,30 L252,22" fill="none" stroke="#185FA5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M28,82 L66,79 L104,75 L142,78 L180,70 L218,65 L252,60" fill="none" stroke="#85B7EB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M28,72 L66,60 L104,52 L142,56 L180,42 L218,30 L252,22 L252,89 L28,89Z" fill="#185FA5" opacity="0.06"/>
+            <text x="28" y="100" text-anchor="middle" style="font-size:8px;fill:var(--color-text-tertiary)">5/1</text>
+            <text x="104" y="100" text-anchor="middle" style="font-size:8px;fill:var(--color-text-tertiary)">5/10</text>
+            <text x="180" y="100" text-anchor="middle" style="font-size:8px;fill:var(--color-text-tertiary)">5/20</text>
+            <text x="252" y="100" text-anchor="middle" style="font-size:8px;fill:var(--color-text-tertiary)">5/31</text>
+          </svg>
+        </div>
+
+        <div class="card">
+          <div style="margin-bottom:10px"><span class="chart-title">재방문율 테이블 (주별)</span></div>
+          <table style="width:100%;font-size:11px;border-collapse:collapse;table-layout:fixed">
+            <thead>
+              <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+                <th style="text-align:left;padding:5px 4px;font-weight:500;color:var(--color-text-secondary);font-size:10px;width:30%">기간</th>
+                <th style="text-align:right;padding:5px 4px;font-weight:500;color:var(--color-text-secondary);font-size:10px;width:25%">신규</th>
+                <th style="text-align:right;padding:5px 4px;font-weight:500;color:var(--color-text-secondary);font-size:10px;width:25%">재방문</th>
+                <th style="text-align:right;padding:5px 4px;font-weight:500;color:var(--color-text-secondary);font-size:10px;width:20%">재방문율</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+                <td style="padding:6px 4px;color:var(--color-text-secondary)">5/1 – 5/7</td>
+                <td style="padding:6px 4px;text-align:right;color:var(--color-text-primary)">5,840</td>
+                <td style="padding:6px 4px;text-align:right;color:var(--color-text-primary)">2,120</td>
+                <td style="padding:6px 4px;text-align:right"><span style="color:#0F6E56;font-weight:500">36.3%</span></td>
+              </tr>
+              <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+                <td style="padding:6px 4px;color:var(--color-text-secondary)">5/8 – 5/14</td>
+                <td style="padding:6px 4px;text-align:right;color:var(--color-text-primary)">6,210</td>
+                <td style="padding:6px 4px;text-align:right;color:var(--color-text-primary)">2,380</td>
+                <td style="padding:6px 4px;text-align:right"><span style="color:#0F6E56;font-weight:500">38.3%</span></td>
+              </tr>
+              <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+                <td style="padding:6px 4px;color:var(--color-text-secondary)">5/15 – 5/21</td>
+                <td style="padding:6px 4px;text-align:right;color:var(--color-text-primary)">5,990</td>
+                <td style="padding:6px 4px;text-align:right;color:var(--color-text-primary)">2,450</td>
+                <td style="padding:6px 4px;text-align:right"><span style="color:#0F6E56;font-weight:500">40.9%</span></td>
+              </tr>
+              <tr>
+                <td style="padding:6px 4px;color:var(--color-text-secondary)">5/22 – 5/31</td>
+                <td style="padding:6px 4px;text-align:right;color:var(--color-text-primary)">5,811</td>
+                <td style="padding:6px 4px;text-align:right;color:var(--color-text-primary)">2,429</td>
+                <td style="padding:6px 4px;text-align:right"><span style="color:#0F6E56;font-weight:500">41.8%</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <span class="chart-title">상위 사용자 TOP 8</span>
+          <span style="font-size:10px;color:var(--color-text-tertiary)">이벤트 수 기준 정렬</span>
+        </div>
+        <table style="width:100%;font-size:11px;border-collapse:collapse;table-layout:fixed">
+          <thead>
+            <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+              <th style="text-align:left;padding:5px 6px;font-weight:500;color:var(--color-text-secondary);font-size:10px;width:28%">사용자</th>
+              <th style="text-align:left;padding:5px 6px;font-weight:500;color:var(--color-text-secondary);font-size:10px;width:13%">그룹</th>
+              <th style="text-align:right;padding:5px 6px;font-weight:500;color:var(--color-text-secondary);font-size:10px;width:13%">이벤트</th>
+              <th style="text-align:right;padding:5px 6px;font-weight:500;color:var(--color-text-secondary);font-size:10px;width:13%">세션</th>
+              <th style="text-align:right;padding:5px 6px;font-weight:500;color:var(--color-text-secondary);font-size:10px;width:13%">구매</th>
+              <th style="padding:5px 6px;font-weight:500;color:var(--color-text-secondary);font-size:10px;width:20%">활동량</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+              <td style="padding:7px 6px"><div style="display:flex;align-items:center;gap:7px"><div class="avatar">KJ</div><span style="color:var(--color-text-primary)">user_1042</span></div></td>
+              <td style="padding:7px 6px"><span class="tag ret">재방문</span></td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-primary)">482</td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-secondary)">24</td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-primary);font-weight:500">18</td>
+              <td style="padding:7px 6px"><div class="prog-bar"><div class="prog-fill" style="width:96%;background:#185FA5"></div></div></td>
+            </tr>
+            <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+              <td style="padding:7px 6px"><div style="display:flex;align-items:center;gap:7px"><div class="avatar">SH</div><span style="color:var(--color-text-primary)">user_0387</span></div></td>
+              <td style="padding:7px 6px"><span class="tag ret">재방문</span></td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-primary)">391</td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-secondary)">19</td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-primary);font-weight:500">14</td>
+              <td style="padding:7px 6px"><div class="prog-bar"><div class="prog-fill" style="width:78%;background:#185FA5"></div></div></td>
+            </tr>
+            <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+              <td style="padding:7px 6px"><div style="display:flex;align-items:center;gap:7px"><div class="avatar">LY</div><span style="color:var(--color-text-primary)">user_2201</span></div></td>
+              <td style="padding:7px 6px"><span class="tag new">신규</span></td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-primary)">317</td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-secondary)">12</td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-primary);font-weight:500">9</td>
+              <td style="padding:7px 6px"><div class="prog-bar"><div class="prog-fill" style="width:63%;background:#378ADD"></div></div></td>
+            </tr>
+            <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+              <td style="padding:7px 6px"><div style="display:flex;align-items:center;gap:7px"><div class="avatar">MK</div><span style="color:var(--color-text-primary)">user_0811</span></div></td>
+              <td style="padding:7px 6px"><span class="tag ret">재방문</span></td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-primary)">278</td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-secondary)">15</td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-primary);font-weight:500">11</td>
+              <td style="padding:7px 6px"><div class="prog-bar"><div class="prog-fill" style="width:55%;background:#185FA5"></div></div></td>
+            </tr>
+            <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+              <td style="padding:7px 6px"><div style="display:flex;align-items:center;gap:7px"><div class="avatar">PJ</div><span style="color:var(--color-text-primary)">user_1553</span></div></td>
+              <td style="padding:7px 6px"><span class="tag new">신규</span></td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-primary)">241</td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-secondary)">8</td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-primary);font-weight:500">5</td>
+              <td style="padding:7px 6px"><div class="prog-bar"><div class="prog-fill" style="width:48%;background:#378ADD"></div></div></td>
+            </tr>
+            <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+              <td style="padding:7px 6px"><div style="display:flex;align-items:center;gap:7px"><div class="avatar">HS</div><span style="color:var(--color-text-primary)">user_0099</span></div></td>
+              <td style="padding:7px 6px"><span class="tag ret">재방문</span></td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-primary)">208</td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-secondary)">11</td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-primary);font-weight:500">7</td>
+              <td style="padding:7px 6px"><div class="prog-bar"><div class="prog-fill" style="width:41%;background:#185FA5"></div></div></td>
+            </tr>
+            <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+              <td style="padding:7px 6px"><div style="display:flex;align-items:center;gap:7px"><div class="avatar">JW</div><span style="color:var(--color-text-primary)">user_3342</span></div></td>
+              <td style="padding:7px 6px"><span class="tag new">신규</span></td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-primary)">183</td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-secondary)">6</td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-primary);font-weight:500">3</td>
+              <td style="padding:7px 6px"><div class="prog-bar"><div class="prog-fill" style="width:36%;background:#378ADD"></div></div></td>
+            </tr>
+            <tr>
+              <td style="padding:7px 6px"><div style="display:flex;align-items:center;gap:7px"><div class="avatar">CY</div><span style="color:var(--color-text-primary)">user_0724</span></div></td>
+              <td style="padding:7px 6px"><span class="tag ret">재방문</span></td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-primary)">159</td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-secondary)">9</td>
+              <td style="padding:7px 6px;text-align:right;color:var(--color-text-primary);font-weight:500">6</td>
+              <td style="padding:7px 6px"><div class="prog-bar"><div class="prog-fill" style="width:31%;background:#185FA5"></div></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

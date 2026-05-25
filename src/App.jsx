@@ -14,7 +14,7 @@ import styled from 'styled-components'
 import GlobalStyle from './GlobalStyle';
 import { ToastContainer } from 'react-toastify';
 import { ThemeProvider } from 'styled-components';
-import { darkTheme, lightTheme } from './themes';
+import { darkTheme, lightTheme } from './theme.js';
 
 function App() {
   const [isDark, setIsDark] = useState(true);

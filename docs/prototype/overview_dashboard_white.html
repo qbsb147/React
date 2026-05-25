@@ -1,0 +1,280 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.wrap{display:flex;height:660px;border-radius:16px;overflow:hidden;border:1px solid #E4E7EC;background:#F5F7FA}
+.sidebar{width:210px;min-width:210px;background:#ffffff;border-right:1px solid #E4E7EC;display:flex;flex-direction:column}
+.logo-area{padding:18px 18px 14px;border-bottom:1px solid #E4E7EC;display:flex;align-items:center;gap:10px}
+.logo-box{width:30px;height:30px;border-radius:8px;background:#185FA5;display:flex;align-items:center;justify-content:center}
+.logo-box i{font-size:15px;color:#E6F1FB}
+.logo-name{font-size:13px;font-weight:500;color:#111827}
+.logo-sub{font-size:10px;color:#9CA3AF;margin-top:1px}
+.nav{padding:12px 10px 0}
+.nav-sec-label{font-size:10px;color:#9CA3AF;letter-spacing:.06em;text-transform:uppercase;padding:0 8px 5px}
+.ni{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:12.5px;color:#6B7280;margin-bottom:2px;transition:background .12s}
+.ni:hover{background:#F3F4F6}
+.ni.active{background:#EFF6FF;color:#185FA5}
+.ni.active i{color:#185FA5}
+.ni i{font-size:16px;color:#9CA3AF}
+.filter-area{padding:14px 16px;border-top:1px solid #E4E7EC;flex:1;overflow-y:auto}
+.f-title{font-size:11px;font-weight:500;color:#374151;margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.f-title i{font-size:13px;color:#9CA3AF}
+.f-group{margin-bottom:14px}
+.f-label{font-size:10.5px;color:#9CA3AF;margin-bottom:5px}
+.f-input{width:100%;font-size:11px;padding:5px 9px;border:1px solid #E4E7EC;border-radius:7px;background:#F9FAFB;color:#111827;margin-bottom:4px;outline:none}
+.f-input:focus{border-color:#93C5FD}
+.chk-row{display:flex;align-items:center;gap:7px;margin-bottom:5px;cursor:pointer}
+.chk{width:14px;height:14px;border-radius:3px;border:1.5px solid #93C5FD;background:#EFF6FF;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.chk.on{background:#185FA5;border-color:#185FA5}
+.chk.on i{font-size:9px;color:#fff}
+.chk-text{font-size:11.5px;color:#4B5563}
+.rst-btn{width:100%;padding:7px;font-size:11px;border:1px solid #E4E7EC;border-radius:7px;background:#fff;color:#6B7280;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;margin-top:6px}
+.rst-btn:hover{background:#F3F4F6}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{padding:14px 20px;background:#ffffff;border-bottom:1px solid #E4E7EC;display:flex;align-items:center;justify-content:space-between}
+.tb-left .pg-title{font-size:15px;font-weight:500;color:#111827}
+.tb-left .pg-sub{font-size:11px;color:#9CA3AF;margin-top:2px}
+.tb-right{display:flex;align-items:center;gap:8px}
+.dot-live{display:flex;align-items:center;gap:5px;font-size:11px;color:#059669;background:#ECFDF5;padding:4px 10px;border-radius:20px;font-weight:500}
+.dot{width:6px;height:6px;border-radius:50%;background:#059669}
+.tb-btn{width:30px;height:30px;border-radius:7px;border:1px solid #E4E7EC;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.tb-btn:hover{background:#F3F4F6}
+.tb-btn i{font-size:15px;color:#6B7280}
+.content{flex:1;overflow-y:auto;padding:16px 18px;background:#F5F7FA}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.kpi{background:#fff;border:1px solid #E4E7EC;border-radius:12px;padding:14px 16px;position:relative;overflow:hidden}
+.kpi-accent{position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0}
+.kpi-icon-wrap{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.kpi-icon-wrap i{font-size:17px}
+.kpi-lbl{font-size:10.5px;color:#9CA3AF;margin-bottom:4px}
+.kpi-val{font-size:20px;font-weight:500;color:#111827;margin-bottom:4px;line-height:1}
+.kpi-delta{font-size:10.5px;display:flex;align-items:center;gap:3px}
+.up{color:#059669}.down{color:#DC2626}
+.row2{display:grid;grid-template-columns:1.65fr 1fr;gap:12px;margin-bottom:14px}
+.card{background:#fff;border:1px solid #E4E7EC;border-radius:12px;padding:14px 16px}
+.card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.card-title{font-size:12px;font-weight:500;color:#111827}
+.legend{display:flex;gap:10px}
+.leg-item{display:flex;align-items:center;gap:4px;font-size:10px;color:#9CA3AF}
+.leg-dot{width:7px;height:7px;border-radius:50%}
+.bot-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+</style>
+
+<div class="wrap">
+  <div class="sidebar">
+    <div class="logo-area">
+      <div class="logo-box"><i class="ti ti-chart-dots" aria-hidden="true"></i></div>
+      <div>
+        <div class="logo-name">ShopAnalytics</div>
+        <div class="logo-sub">데이터 분석 대시보드</div>
+      </div>
+    </div>
+
+    <div class="nav">
+      <div class="nav-sec-label">메뉴</div>
+      <div class="ni active"><i class="ti ti-layout-dashboard" aria-hidden="true"></i>Overview</div>
+      <div class="ni"><i class="ti ti-users" aria-hidden="true"></i>사용자 분석</div>
+      <div class="ni"><i class="ti ti-bolt" aria-hidden="true"></i>이벤트 분석</div>
+      <div class="ni"><i class="ti ti-shopping-bag" aria-hidden="true"></i>쇼핑몰</div>
+    </div>
+
+    <div class="filter-area">
+      <div class="f-title"><i class="ti ti-adjustments-horizontal" aria-hidden="true"></i>필터</div>
+      <div class="f-group">
+        <div class="f-label">날짜 범위</div>
+        <input class="f-input" type="text" value="2025-05-01" readonly>
+        <input class="f-input" type="text" value="2025-05-31" readonly>
+      </div>
+      <div class="f-group">
+        <div class="f-label">이벤트 타입</div>
+        <label class="chk-row"><div class="chk on"><i class="ti ti-check"></i></div><span class="chk-text">page_view</span></label>
+        <label class="chk-row"><div class="chk on"><i class="ti ti-check"></i></div><span class="chk-text">click</span></label>
+        <label class="chk-row"><div class="chk on"><i class="ti ti-check"></i></div><span class="chk-text">purchase</span></label>
+      </div>
+      <div class="f-group">
+        <div class="f-label">사용자 그룹</div>
+        <label class="chk-row"><div class="chk on"><i class="ti ti-check"></i></div><span class="chk-text">신규 유저</span></label>
+        <label class="chk-row"><div class="chk"><i class="ti ti-check"></i></div><span class="chk-text">재방문 유저</span></label>
+      </div>
+      <button class="rst-btn"><i class="ti ti-refresh" style="font-size:12px" aria-hidden="true"></i>필터 초기화</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="tb-left">
+        <div class="pg-title">Overview 대시보드</div>
+        <div class="pg-sub">2025년 5월 · 전체 채널 기준</div>
+      </div>
+      <div class="tb-right">
+        <div class="dot-live"><div class="dot"></div>실시간</div>
+        <div class="tb-btn"><i class="ti ti-download" aria-hidden="true"></i></div>
+        <div class="tb-btn"><i class="ti ti-bell" aria-hidden="true"></i></div>
+        <div style="width:30px;height:30px;border-radius:50%;background:#DBEAFE;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#1E40AF;cursor:pointer">KJ</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div class="kpi-accent" style="background:#185FA5"></div>
+          <div class="kpi-icon-wrap" style="background:#EFF6FF"><i class="ti ti-users" style="color:#185FA5" aria-hidden="true"></i></div>
+          <div class="kpi-lbl">오늘 방문자 수</div>
+          <div class="kpi-val">1,284</div>
+          <div class="kpi-delta up"><i class="ti ti-arrow-up" style="font-size:10px"></i>전일 대비 +8.2%</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-accent" style="background:#059669"></div>
+          <div class="kpi-icon-wrap" style="background:#ECFDF5"><i class="ti ti-calendar-stats" style="color:#059669" aria-hidden="true"></i></div>
+          <div class="kpi-lbl">이번 달 방문자</div>
+          <div class="kpi-val">38,470</div>
+          <div class="kpi-delta up"><i class="ti ti-arrow-up" style="font-size:10px"></i>전월 동기 +12.5%</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-accent" style="background:#D97706"></div>
+          <div class="kpi-icon-wrap" style="background:#FFFBEB"><i class="ti ti-bolt" style="color:#D97706" aria-hidden="true"></i></div>
+          <div class="kpi-lbl">총 이벤트 수</div>
+          <div class="kpi-val">204,893</div>
+          <div class="kpi-delta up"><i class="ti ti-arrow-up" style="font-size:10px"></i>전월 대비 +3.1%</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-accent" style="background:#DC2626"></div>
+          <div class="kpi-icon-wrap" style="background:#FEF2F2"><i class="ti ti-shopping-cart" style="color:#DC2626" aria-hidden="true"></i></div>
+          <div class="kpi-lbl">구매 전환율</div>
+          <div class="kpi-val">3.7%</div>
+          <div class="kpi-delta down"><i class="ti ti-arrow-down" style="font-size:10px"></i>전월 대비 -0.4%p</div>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div class="card">
+          <div class="card-hd">
+            <span class="card-title">이벤트 트렌드 (일별)</span>
+            <div class="legend">
+              <div class="leg-item"><div class="leg-dot" style="background:#185FA5"></div>page_view</div>
+              <div class="leg-item"><div class="leg-dot" style="background:#059669"></div>click</div>
+              <div class="leg-item"><div class="leg-dot" style="background:#D97706;"></div>purchase</div>
+            </div>
+          </div>
+          <svg width="100%" viewBox="0 0 360 118" style="overflow:visible">
+            <line x1="32" y1="8" x2="352" y2="8" stroke="#F3F4F6" stroke-width="1"/>
+            <line x1="32" y1="34" x2="352" y2="34" stroke="#F3F4F6" stroke-width="1"/>
+            <line x1="32" y1="60" x2="352" y2="60" stroke="#F3F4F6" stroke-width="1"/>
+            <line x1="32" y1="86" x2="352" y2="86" stroke="#F3F4F6" stroke-width="1"/>
+            <text x="26" y="11" text-anchor="end" style="font-size:9px;fill:#9CA3AF">8k</text>
+            <text x="26" y="37" text-anchor="end" style="font-size:9px;fill:#9CA3AF">6k</text>
+            <text x="26" y="63" text-anchor="end" style="font-size:9px;fill:#9CA3AF">4k</text>
+            <text x="26" y="89" text-anchor="end" style="font-size:9px;fill:#9CA3AF">2k</text>
+            <path d="M32,70 L68,56 L104,48 L140,58 L176,40 L212,28 L248,34 L284,22 L320,25 L352,17 L352,110 L32,110Z" fill="#185FA5" opacity="0.07"/>
+            <polyline fill="none" stroke="#185FA5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="32,70 68,56 104,48 140,58 176,40 212,28 248,34 284,22 320,25 352,17"/>
+            <polyline fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="32,84 68,79 104,74 140,80 176,66 212,58 248,63 284,53 320,56 352,49"/>
+            <polyline fill="none" stroke="#D97706" stroke-width="1.5" stroke-dasharray="5 3" stroke-linecap="round" stroke-linejoin="round" points="32,95 68,92 104,89 140,94 176,88 212,84 248,87 284,82 320,84 352,80"/>
+            <circle cx="284" cy="22" r="3" fill="#185FA5"/>
+            <text x="284" y="16" text-anchor="middle" style="font-size:8px;fill:#185FA5;font-weight:500">최고</text>
+            <text x="32" y="108" text-anchor="middle" style="font-size:9px;fill:#9CA3AF">5/1</text>
+            <text x="104" y="108" text-anchor="middle" style="font-size:9px;fill:#9CA3AF">5/8</text>
+            <text x="176" y="108" text-anchor="middle" style="font-size:9px;fill:#9CA3AF">5/15</text>
+            <text x="248" y="108" text-anchor="middle" style="font-size:9px;fill:#9CA3AF">5/22</text>
+            <text x="320" y="108" text-anchor="middle" style="font-size:9px;fill:#9CA3AF">5/29</text>
+          </svg>
+        </div>
+
+        <div class="card">
+          <div class="card-hd"><span class="card-title">신규 / 재방문 비율</span></div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:18px;padding:6px 0">
+            <svg width="96" height="96" viewBox="0 0 96 96">
+              <circle cx="48" cy="48" r="32" fill="none" stroke="#E4E7EC" stroke-width="14"/>
+              <circle cx="48" cy="48" r="32" fill="none" stroke="#185FA5" stroke-width="14" stroke-dasharray="128 73" stroke-dashoffset="-18" transform="rotate(-90 48 48)"/>
+              <circle cx="48" cy="48" r="32" fill="none" stroke="#BFDBFE" stroke-width="14" stroke-dasharray="73 128" stroke-dashoffset="-146" transform="rotate(-90 48 48)"/>
+              <text x="48" y="45" text-anchor="middle" style="font-size:13px;font-weight:500;fill:#111827">62%</text>
+              <text x="48" y="57" text-anchor="middle" style="font-size:8px;fill:#9CA3AF">신규</text>
+            </svg>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div>
+                <div style="display:flex;align-items:center;gap:5px;margin-bottom:2px">
+                  <div style="width:9px;height:9px;border-radius:2px;background:#185FA5"></div>
+                  <span style="font-size:11px;color:#6B7280">신규</span>
+                </div>
+                <span style="font-size:16px;font-weight:500;color:#111827">62%</span>
+                <span style="font-size:10px;color:#9CA3AF;margin-left:3px">23,851명</span>
+              </div>
+              <div>
+                <div style="display:flex;align-items:center;gap:5px;margin-bottom:2px">
+                  <div style="width:9px;height:9px;border-radius:2px;background:#BFDBFE"></div>
+                  <span style="font-size:11px;color:#6B7280">재방문</span>
+                </div>
+                <span style="font-size:16px;font-weight:500;color:#111827">38%</span>
+                <span style="font-size:10px;color:#9CA3AF;margin-left:3px">14,619명</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bot-row">
+        <div class="card">
+          <div class="card-hd">
+            <span class="card-title">전환 퍼널</span>
+            <span style="font-size:10px;color:#9CA3AF">VIEW → CLICK → PURCHASE</span>
+          </div>
+          <svg width="100%" viewBox="0 0 260 116">
+            <rect x="8" y="8" width="244" height="26" rx="6" fill="#185FA5"/>
+            <text x="130" y="25" text-anchor="middle" style="font-size:10px;font-weight:500;fill:#E6F1FB">page_view · 204,893</text>
+            <rect x="28" y="42" width="204" height="26" rx="6" fill="#378ADD"/>
+            <text x="130" y="59" text-anchor="middle" style="font-size:10px;font-weight:500;fill:#EFF6FF">click · 87,240 (42.6%)</text>
+            <rect x="68" y="76" width="124" height="26" rx="6" fill="#93C5FD"/>
+            <text x="130" y="93" text-anchor="middle" style="font-size:10px;font-weight:500;fill:#1E3A5F">purchase · 7,581 (8.7%)</text>
+            <line x1="8" y1="34" x2="28" y2="42" stroke="#DBEAFE" stroke-width="0.5"/>
+            <line x1="252" y1="34" x2="232" y2="42" stroke="#DBEAFE" stroke-width="0.5"/>
+            <line x1="28" y1="68" x2="68" y2="76" stroke="#DBEAFE" stroke-width="0.5"/>
+            <line x1="232" y1="68" x2="192" y2="76" stroke="#DBEAFE" stroke-width="0.5"/>
+          </svg>
+        </div>
+
+        <div class="card">
+          <div class="card-hd">
+            <span class="card-title">상위 페이지 TOP 5</span>
+            <span style="font-size:10px;color:#9CA3AF">방문 수 기준</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:9px;padding-top:2px">
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                <span style="font-size:11px;color:#374151">/home</span>
+                <span style="font-size:11px;font-weight:500;color:#111827">14.8k</span>
+              </div>
+              <div style="height:6px;border-radius:3px;background:#F3F4F6"><div style="height:100%;width:100%;border-radius:3px;background:#185FA5"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                <span style="font-size:11px;color:#374151">/products</span>
+                <span style="font-size:11px;font-weight:500;color:#111827">11.2k</span>
+              </div>
+              <div style="height:6px;border-radius:3px;background:#F3F4F6"><div style="height:100%;width:76%;border-radius:3px;background:#378ADD"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                <span style="font-size:11px;color:#374151">/cart</span>
+                <span style="font-size:11px;font-weight:500;color:#111827">7.6k</span>
+              </div>
+              <div style="height:6px;border-radius:3px;background:#F3F4F6"><div style="height:100%;width:51%;border-radius:3px;background:#60A5FA"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                <span style="font-size:11px;color:#374151">/checkout</span>
+                <span style="font-size:11px;font-weight:500;color:#111827">5.0k</span>
+              </div>
+              <div style="height:6px;border-radius:3px;background:#F3F4F6"><div style="height:100%;width:34%;border-radius:3px;background:#93C5FD"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                <span style="font-size:11px;color:#374151">/search</span>
+                <span style="font-size:11px;font-weight:500;color:#111827">3.6k</span>
+              </div>
+              <div style="height:6px;border-radius:3px;background:#F3F4F6"><div style="height:100%;width:24%;border-radius:3px;background:#BFDBFE"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
