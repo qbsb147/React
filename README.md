@@ -9,6 +9,7 @@
 ### **[🐴 GitHub Projects](https://github.com/users/qbsb147/projects/4/views/1)**: 진행 단계와 작업 상태를 시각화
 
 ### **[📓 기획서](./docs/Planning.md)**: 프로젝트 기획서
+### **[📓 기획서](./docs/git/branch.md)**: 프로젝트 기획서
 
 ## 📌 학습 목표
 

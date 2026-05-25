@@ -1,0 +1,83 @@
+---
+config:
+  layout: elk
+  theme: forest
+  look: handDrawn
+---
+graph TB
+    ALL[쇼핑몰 데이터 분석 대시보드]
+
+    %% 1. 공통
+    subgraph Common[공통 시스템]
+    direction LR
+        Common1[라우팅 구조 설정]
+        Common2[전역 상태 관리 Context]
+        Common3["filterReducer 구현"]
+        Common4[데이터 필터링 로직]
+        Common5[에러 / 로딩 처리]
+    end
+
+    %% 2. 필터
+    subgraph Filter[필터 시스템]
+    direction LR
+        Filter1[날짜 범위]
+        Filter2[이벤트 종류]
+        Filter3[사용자 유형]
+        Filter4[필터 초기화]
+    end
+
+    %% 3. Overview
+    subgraph Overview[Overview 페이지]
+    direction LR
+        Overview1[KPI 카드]
+        Overview1 --> Overview11[하루 사용자 수]
+        Overview1 --> Overview12[월 사용자 수]
+        Overview1 --> Overview13[총 이벤트 수]
+        Overview1 --> Overview14[구매 전환율]
+
+        Overview2[차트]
+        Overview2 --> Overview21[이벤트 트렌드]
+        Overview2 --> Overview22[전환 퍼널]
+        Overview2 --> Overview23[상위 페이지 TOP5]
+    end
+
+    %% 4. Users
+    subgraph User[사용자 분석 페이지]
+    direction LR
+        User1[신규/재방문 비율]
+        User2[재방문율 테이블]
+        User3["사용자 목록(순위)"]
+    end
+
+    %% 5. Events
+    subgraph Event[이벤트 분석 페이지]
+    direction LR
+        Event1["시간별 이벤트 발생량(스택 바)"]
+        Event2[이벤트 분포 퍼널]
+        Event3[이벤트 로그 테이블]
+    end
+
+    %% 6. Shop
+    subgraph Shop[쇼핑몰 페이지]
+    direction LR
+        Shop1[회원가입/로그인]
+        Shop2[상품 목록]
+        Shop3[상품 상세]
+    end
+
+    %% 7. 데이터
+    subgraph Data[데이터 처리]
+    direction LR
+        Data1[json-server 연동]
+        Data2[이벤트 데이터 가공]
+        Data3[유저 데이터 가공]
+        Data4[집계 로직]
+    end
+
+    ALL --> Common
+    ALL --> Filter
+    ALL --> Overview
+    ALL --> User
+    ALL --> Event
+    ALL --> Shop
+    ALL --> Data

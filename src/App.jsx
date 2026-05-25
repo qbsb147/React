@@ -3,32 +3,41 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
-import User from './pages/users/User.jsx'
-import Overview from './pages/overview/Overview'
-import Event from './pages/events/Event.jsx'
-import Sidebar from './pages/sidebar/Sidebar'
+import User from './pages/Users/User.jsx'
+import Overview from './pages/Overview/Overview'
+import Event from './pages/Events/Event.jsx'
+import Sidebar from './pages/Sidebar/Sidebar'
+import List from './pages/Shop/List.jsx'
+import Detail from './pages/Shop/Detail.jsx'
 import { BrowserRouter, Route, Router, Routes } from 'react-router-dom'
 import styled from 'styled-components'
 import GlobalStyle from './GlobalStyle';
+import { ToastContainer } from 'react-toastify';
+import { ThemeProvider } from 'styled-components';
+import { darkTheme, lightTheme } from './themes';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [isDark, setIsDark] = useState(true);
+  const toggleTheme = () => setIsDark(!isDark);
+
 
   return (
-    <BrowserRouter>
-      <GlobalStyle />
-      <Router>
-        <Sidebar>
-          <Center>
-            <Routes>
-              <Route path="/" element={<Overview />} />
-              <Route path="/user_analytics" element={<User />} />
-              <Route path="/event_analytics" element={<Event />} />
-            </Routes>
-          </Center>
-        </Sidebar>
-      </Router>
-    </BrowserRouter>
+    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+      <BrowserRouter>
+        <GlobalStyle />
+        <Sidebar onToggleTheme={toggleTheme} />
+        <Center>
+          <Routes>
+            <Route path="/" element={<Overview />} />
+            <Route path="/users" element={<User />} />
+            <Route path="/events" element={<Event />} />
+            <Route path="/shop" element={<List />} />
+            <Route path="/shop/:detail" element={<Detail />} />
+          </Routes>
+        </Center>
+        <ToastContainer />
+      </BrowserRouter>
+    </ThemeProvider>
   )
 }
 
