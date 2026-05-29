@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
-import styled, { css } from 'styled-components'
+import React, { useState } from 'react';
+import styled, { css } from 'styled-components';
 import { IconArrowUp } from '@tabler/icons-react';
 
-export const KPI = ({title, value, content, diff, color = 'default' }) => {
+export const KPI = ({ title, value, content, diff, color = 'default' }) => {
   const status = diff?.startsWith('-') ? 'down' : 'up';
   const formatNumber = (value) => {
     if (typeof value !== 'number') return value;
@@ -12,63 +12,63 @@ export const KPI = ({title, value, content, diff, color = 'default' }) => {
     <Container color={color}>
       <Title>{title}</Title>
       <Value>{formatNumber(value)}</Value>
-      <Delta style={{ color: status==='up'?"#3FB950": "#F85149"}}>
+      <Delta style={{ color: status === 'up' ? '#3FB950' : '#F85149' }}>
         <IconArrowUp size={16} />
-        <TextGroup  style={{ gap: "1px"}}>
+        <TextGroup style={{ gap: '1px' }}>
           <Content status={status}>{content}</Content>
-          <Diff status={status}>{diff}</Diff>          
-        </TextGroup >
+          <Diff status={status}>{diff}</Diff>
+        </TextGroup>
       </Delta>
     </Container>
-  )
-}
+  );
+};
 
-export default KPI
+export default KPI;
 
 const Container = styled.div`
-    padding: 12px 14px; 
-    position: relative; 
-    overflow: hidden; 
-    border: 0.5px solid ${({ theme }) => theme.colors.border};
-    border-radius: ${({ theme }) => theme.borderRadius.xl};;
-    width: 130px;
-    height: 110px;
-    background: ${({ theme }) => theme.colors.card};;
-    padding: 12px 14px;
-    overflow: hidden;
-    &::before {
-      content: '';
-      position:absolute; 
-      top:0; 
-      left:0; 
-      right:0; 
-      height:4px; 
-      background: #185FA5; 
-      border-radius: 4px 4px 0 0; 
-      ${({ color }) =>
-        color === 'green' &&
-        css`
-          background: #3B6D11;
-        `}
+  padding: 12px 14px;
+  position: relative;
+  overflow: hidden;
+  border: 0.5px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.borderRadius.xl};
+  width: 130px;
+  height: 110px;
+  background: ${({ theme }) => theme.colors.card};
+  padding: 12px 14px;
+  overflow: hidden;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: #185fa5;
+    border-radius: 4px 4px 0 0;
+    ${({ color }) =>
+      color === 'green' &&
+      css`
+        background: #3b6d11;
+      `}
+
+    ${({ color }) =>
+      color === 'coral' &&
+      css`
+        background: #993c1d;
+      `}
 
       ${({ color }) =>
-        color === 'coral' &&
-        css`
-          background: #993C1D;
-        `}
-
-      ${({ color }) =>
-        color === 'amber' &&
-        css`
-          background: #BA7517;
-        `}
-    }
-`
+      color === 'amber' &&
+      css`
+        background: #ba7517;
+      `}
+  }
+`;
 const Title = styled.div`
   font-size: ${({ theme }) => theme.fontSizes.xs};
   color: ${({ theme }) => theme.colors.text.muted};
   display: flex;
-`
+`;
 
 const Value = styled.div`
   font-size: ${({ theme }) => theme.fontSizes['2xl']};
@@ -77,7 +77,7 @@ const Value = styled.div`
   line-height: 1;
   display: flex;
   margin-bottom: 10px;
-`
+`;
 
 const Content = styled.div`
   font-size: ${({ theme }) => theme.fontSizes.xs};
@@ -86,26 +86,26 @@ const Content = styled.div`
   ${({ status }) =>
     status === 'up' &&
     css`
-      color: #3FB950;
+      color: #3fb950;
     `}
 
   ${({ status }) =>
     status === 'down' &&
     css`
-      color: #F85149;
+      color: #f85149;
     `}
-`
+`;
 const Diff = styled.div`
   font-size: ${({ theme }) => theme.fontSizes.xs};
   display: flex;
-`
+`;
 
 const Delta = styled.div`
   font-size: ${({ theme }) => theme.fontSizes.xs};
   display: flex;
   align-items: center;
   gap: 3px;
-`
+`;
 
 const TextGroup = styled.div`
   display: flex;

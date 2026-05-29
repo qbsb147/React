@@ -1,13 +1,13 @@
 export const lightTheme = {
   colors: {
-    primary: '#185FA5',        // Primary Blue
-    secondary: '#378ADD',      // Funnel Mid
+    primary: '#185FA5', // Primary Blue
+    secondary: '#378ADD', // Funnel Mid
 
-    background: '#F5F7FA',     // Page BG
-    card: '#FFFFFF',           // Card / Sidebar
-    inputBg: '#F9FAFB',        // Input BG
-    hover: '#F3F4F6',          // Hover / Grid Line
-    activeNav: '#EFF6FF',      // Active Nav / Check
+    background: '#F5F7FA', // Page BG
+    card: '#FFFFFF', // Card / Sidebar
+    inputBg: '#F9FAFB', // Input BG
+    hover: '#F3F4F6', // Hover / Grid Line
+    activeNav: '#EFF6FF', // Active Nav / Check
 
     border: '#E4E7EC',
     inputFocus: '#93C5FD',
@@ -156,16 +156,16 @@ export const lightTheme = {
 
 export const darkTheme = {
   colors: {
-    primary: '#58A6FF',        // Primary Blue
-    secondary: '#378ADD',      // Chart Line
+    primary: '#58A6FF', // Primary Blue
+    secondary: '#378ADD', // Chart Line
 
-    background: '#0D1117',     // Page BG
-    card: '#161B22',           // Sidebar / Card
-    cardSurface: '#1C2333',    // Card Surface
-    inputBg: '#21262D',        // Input / Hover
-    hover: '#21262D',          
-    activeNav: '#0C2D52',      // Active Nav BG
-    inputFocus: '#58A6FF',     
+    background: '#0D1117', // Page BG
+    card: '#161B22', // Sidebar / Card
+    cardSurface: '#1C2333', // Card Surface
+    inputBg: '#21262D', // Input / Hover
+    hover: '#21262D',
+    activeNav: '#0C2D52', // Active Nav BG
+    inputFocus: '#58A6FF',
 
     border: '#30363D',
     borderActive: '#1D4ED8',

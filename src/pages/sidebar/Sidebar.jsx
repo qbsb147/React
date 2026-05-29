@@ -1,20 +1,19 @@
-import React from 'react'
+import React from 'react';
 import { FaMoon, FaSun } from 'react-icons/fa';
 import styled from 'styled-components';
 
 const Sidebar = ({ onToggleTheme }) => {
   return (
     <Container>
-      
       <ToggleButton onClick={onToggleTheme}>
         <FaSun /> / <FaMoon />
         <br /> 테마 토글
       </ToggleButton>
     </Container>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;
 const Container = styled.div`
   width: 200px;
   min-height: 100%;
