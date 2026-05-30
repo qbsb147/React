@@ -5,9 +5,9 @@ export const dataService = {
         const response = await axiosInstance.get(API_ENDPOINTS.DATA.LAST_USER)
         return response.data?.data[0] ? response.data.data[0].user_no : 1;
     },
-    generateDummyUser : async() => {
-        const response = await axiosInstance.post(API_ENDPOINTS.DATA)
-        return response.data?.data[0] ? response.data.data[0].user_no : 1;
+    generateDummyUser : async(payload) => {
+        const response = await axiosInstance.post(API_ENDPOINTS.DATA.DUMMY_USER, payload)
+        return response.data;
     },
     getUserIndexList : async(payload)=>{
         const response = await axiosInstance.get(API_ENDPOINTS.DATA.DUMMY_USER, payload);

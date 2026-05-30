@@ -35,11 +35,12 @@ const DataFactory = () => {
   }
 
   async function generateDummyBoard() {
-    const boardLastIdx = await dataService.getBoardLastIndex();
-    const userIdxList = await dataService.getUserIndexList();
     try {
+      const boardLastIdx = await dataService.getBoardLastIndex();
+      const userIdxList = await dataService.getUserIndexList();
       for (let i = boardLastIdx; i < boardLastIdx+30; i++) {
-        const contentNo = content[randomNum(0,content.length-1)];
+        const contentNo = randomNum(0,content.length-1);
+
         const board = {
           board_no    : i,
           user_no     : userIdxList[randomNum(0, userIdxList.length-1)],
@@ -49,6 +50,7 @@ const DataFactory = () => {
           create_at   : Date.now(),
           update_at   : Date.now(),
         };
+        console.log(board)
         await dataService.generateDummyBoard(board);
       }
       toast.info("게시글 더미데이터 생성 성공")
@@ -57,17 +59,18 @@ const DataFactory = () => {
     }
   }
   async function generateDummyEvent() {
-    const EventLastIdx = await dataService.getEventLastIndex();
-    const userIdxList = await dataService.getUserIndexList();
-    const boardIdxList = await dataService.getBoardIndexList();
+    console.log("렌더링됨")
     try {
+      const EventLastIdx = await dataService.getEventLastIndex();
+      const userIdxList  = await dataService.getUserIndexList();
+      const boardIdxList = await dataService.getBoardIndexList();
       for (let i = EventLastIdx; i < EventLastIdx+50; i++) {
         const event = {
           event_no    : i,
-          user_no     : userIdxList[randomNum(0, userIdxList.length-1)],
+          user_no     : userIdxList [randomNum(0, userIdxList.length-1)],
           board_no    : boardIdxList[randomNum(0, boardIdxList.length-1)],
-          type        : type[randomNum(0, type.length-1)],
-          create_at   : thumbnail[randomNum(0,thumbnail.length-1)],
+          type        : type        [randomNum(0, type.length-1)],
+          create_at   : thumbnail   [randomNum(0, thumbnail.length-1)],
         };
         await dataService.generateDummyEvent(event);
       }
