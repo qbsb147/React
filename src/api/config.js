@@ -15,7 +15,15 @@ export const IMG_CONFIG = {
 
 export const API_ENDPOINTS = {
   DATA: {
-    USER: `/data/user`,
-    SHOP: `/data/shop`,
+    LAST_USER: `/user?_sort=-user_no&_page=1&_per_page=1`,
+    DUMMY_USER: `/user`,
+    LAST_BOARD: `/board?_sort=-board_no&_page=1&_per_page=1`,
+    DUMMY_BOARD: `/board`,
+    LAST_EVENT: `/event?_sort=-event_no&_page=1&_per_page=1`,
+    DUMMY_EVENT: `/event`,
+    LAST_PRODUCT: `/product?_sort=-product_no&_page=1&_per_page=1`,
+    DUMMY_PRODUCT: `/product`,
+    LAST_SALES_RECORD: `/sale_record?_sort=-sales_no&_page=1&_per_page=1`,
+    DUMMY_SALES_RECORD: `/sale_record`,
   },
 };
