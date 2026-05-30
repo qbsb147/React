@@ -28,7 +28,8 @@
   Git 추적만 제거 (파일은 로컬에 유지)
 
 - `.gitignore`  
-  Git이 추적하지 않을 파일 목록 정의  
+  Git이 추적하지 않을 파일 목록 정의
+
 ## Github에 잘못 올라간 파일 삭제
 
 - `git rm <파일명>`  
@@ -55,6 +56,7 @@
 ---
 
 ## 핵심 흐름
+
 git rm → git commit → git push
 
 ## git blame (수정 내역 확인)
@@ -75,4 +77,4 @@ git rm → git commit → git push
   공백 변경은 무시하고 실제 코드 변경만 추적
 
 - `git blame --porcelain <파일명>`  
-  파싱 가능한 상세 형식으로 출력 (스크립트/IDE용)  
+  파싱 가능한 상세 형식으로 출력 (스크립트/IDE용)

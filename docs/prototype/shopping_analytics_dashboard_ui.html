@@ -1,0 +1,282 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+.shell { display: flex; height: 580px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden; background: var(--color-background-tertiary); }
+
+/* Sidebar */
+.sidebar { width: 200px; min-width: 200px; background: var(--color-background-primary); border-right: 0.5px solid var(--color-border-tertiary); display: flex; flex-direction: column; }
+.sidebar-logo { padding: 14px 16px 10px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.logo-mark { display: flex; align-items: center; gap: 8px; }
+.logo-icon { width: 26px; height: 26px; border-radius: 7px; background: #185FA5; display: flex; align-items: center; justify-content: center; }
+.logo-icon i { font-size: 14px; color: #E6F1FB; }
+.logo-text { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.nav-section { padding: 10px 10px 0; }
+.nav-label { font-size: 10px; color: var(--color-text-tertiary); letter-spacing: .06em; text-transform: uppercase; padding: 0 6px 4px; }
+.nav-item { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: var(--border-radius-md); cursor: pointer; font-size: 13px; color: var(--color-text-secondary); transition: background .15s; margin-bottom: 1px; }
+.nav-item:hover { background: var(--color-background-secondary); }
+.nav-item.active { background: #E6F1FB; color: #185FA5; }
+.nav-item.active i { color: #185FA5; }
+.nav-item i { font-size: 16px; color: var(--color-text-tertiary); }
+
+.filter-section { padding: 12px 14px; border-top: 0.5px solid var(--color-border-tertiary); flex: 1; overflow-y: auto; }
+.filter-title { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+.filter-group { margin-bottom: 14px; }
+.filter-label { font-size: 11px; color: var(--color-text-tertiary); margin-bottom: 5px; }
+.date-input { width: 100%; font-size: 11px; padding: 5px 8px; border: 0.5px solid var(--color-border-secondary); border-radius: 6px; background: var(--color-background-secondary); color: var(--color-text-primary); margin-bottom: 4px; }
+.check-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; cursor: pointer; }
+.check-box { width: 13px; height: 13px; border-radius: 3px; border: 1.5px solid #378ADD; background: #E6F1FB; display: flex; align-items: center; justify-content: center; }
+.check-box.checked { background: #185FA5; border-color: #185FA5; }
+.check-box i { font-size: 9px; color: #E6F1FB; }
+.check-text { font-size: 11px; color: var(--color-text-secondary); }
+.reset-btn { width: 100%; padding: 6px; font-size: 11px; border: 0.5px solid var(--color-border-secondary); border-radius: 6px; background: transparent; color: var(--color-text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; margin-top: 4px; }
+.reset-btn:hover { background: var(--color-background-secondary); }
+
+/* Main area */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.topbar { padding: 12px 18px; border-bottom: 0.5px solid var(--color-border-tertiary); background: var(--color-background-primary); display: flex; align-items: center; justify-content: space-between; }
+.page-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); }
+.page-sub { font-size: 11px; color: var(--color-text-tertiary); margin-top: 1px; }
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+.badge { font-size: 10px; padding: 3px 8px; border-radius: 20px; background: #E6F1FB; color: #185FA5; font-weight: 500; }
+.icon-btn { width: 28px; height: 28px; border-radius: 6px; border: 0.5px solid var(--color-border-tertiary); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.icon-btn:hover { background: var(--color-background-secondary); }
+.icon-btn i { font-size: 15px; color: var(--color-text-secondary); }
+
+.content { flex: 1; overflow-y: auto; padding: 14px 16px; }
+
+/* KPI Cards */
+.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px; }
+.kpi-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 12px 14px; position: relative; overflow: hidden; }
+.kpi-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2.5px; background: #185FA5; border-radius: 4px 4px 0 0; }
+.kpi-card.green::before { background: #3B6D11; }
+.kpi-card.amber::before { background: #BA7517; }
+.kpi-card.coral::before { background: #993C1D; }
+.kpi-label { font-size: 10px; color: var(--color-text-tertiary); margin-bottom: 5px; }
+.kpi-value { font-size: 20px; font-weight: 500; color: var(--color-text-primary); line-height: 1; margin-bottom: 4px; }
+.kpi-delta { font-size: 10px; display: flex; align-items: center; gap: 3px; }
+.kpi-delta.up { color: #3B6D11; }
+.kpi-delta.down { color: #993C1D; }
+
+/* Charts row */
+.charts-row { display: grid; grid-template-columns: 1.6fr 1fr; gap: 10px; margin-bottom: 14px; }
+.chart-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 12px 14px; }
+.chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.chart-title { font-size: 12px; font-weight: 500; color: var(--color-text-primary); }
+.chart-legend { display: flex; gap: 10px; }
+.legend-item { display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--color-text-tertiary); }
+.legend-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+/* SVG chart styles */
+.trend-line { fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.area-fill { opacity: 0.07; }
+
+/* Bottom row */
+.bottom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+</style>
+
+<div class="shell">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <div class="logo-icon"><i class="ti ti-chart-dots" aria-hidden="true"></i></div>
+        <span class="logo-text">ShopAnalytics</span>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">메뉴</div>
+      <div class="nav-item active"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Overview</div>
+      <div class="nav-item"><i class="ti ti-users" aria-hidden="true"></i> 사용자 분석</div>
+      <div class="nav-item"><i class="ti ti-bolt" aria-hidden="true"></i> 이벤트 분석</div>
+      <div class="nav-item"><i class="ti ti-shopping-bag" aria-hidden="true"></i> 쇼핑몰</div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title"><i class="ti ti-adjustments-horizontal" aria-hidden="true" style="font-size:13px"></i> 필터</div>
+
+      <div class="filter-group">
+        <div class="filter-label">날짜 범위</div>
+        <input class="date-input" type="text" value="2025-05-01" readonly>
+        <input class="date-input" type="text" value="2025-05-31" readonly>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-label">이벤트 타입</div>
+        <label class="check-row"><div class="check-box checked"><i class="ti ti-check"></i></div><span class="check-text">page_view</span></label>
+        <label class="check-row"><div class="check-box checked"><i class="ti ti-check"></i></div><span class="check-text">click</span></label>
+        <label class="check-row"><div class="check-box checked"><i class="ti ti-check"></i></div><span class="check-text">purchase</span></label>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-label">사용자 그룹</div>
+        <label class="check-row"><div class="check-box checked"><i class="ti ti-check"></i></div><span class="check-text">신규 유저</span></label>
+        <label class="check-row"><div class="check-box"><i class="ti ti-check"></i></div><span class="check-text">재방문 유저</span></label>
+      </div>
+
+      <button class="reset-btn"><i class="ti ti-refresh" aria-hidden="true" style="font-size:12px"></i> 필터 초기화</button>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="page-title">Overview 대시보드</div>
+        <div class="page-sub">2025년 5월 기준 · 전체 채널</div>
+      </div>
+      <div class="topbar-right">
+        <span class="badge">실시간</span>
+        <div class="icon-btn"><i class="ti ti-download" aria-hidden="true"></i></div>
+        <div class="icon-btn"><i class="ti ti-bell" aria-hidden="true"></i></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- KPI Cards -->
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <div class="kpi-label">오늘 방문자 수</div>
+          <div class="kpi-value">1,284</div>
+          <div class="kpi-delta up"><i class="ti ti-arrow-up" style="font-size:10px"></i> 전일 대비 +8.2%</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">이번 달 방문자</div>
+          <div class="kpi-value">38,470</div>
+          <div class="kpi-delta up"><i class="ti ti-arrow-up" style="font-size:10px"></i> 전월 동기 +12.5%</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">총 이벤트 수</div>
+          <div class="kpi-value">204,893</div>
+          <div class="kpi-delta up"><i class="ti ti-arrow-up" style="font-size:10px"></i> 전월 대비 +3.1%</div>
+        </div>
+        <div class="kpi-card coral">
+          <div class="kpi-label">구매 전환율</div>
+          <div class="kpi-value">3.7%</div>
+          <div class="kpi-delta down"><i class="ti ti-arrow-down" style="font-size:10px"></i> 전월 대비 -0.4%p</div>
+        </div>
+      </div>
+
+      <!-- Trend + Donut -->
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">이벤트 트렌드 (일별)</span>
+            <div class="chart-legend">
+              <div class="legend-item"><div class="legend-dot" style="background:#378ADD"></div>page_view</div>
+              <div class="legend-item"><div class="legend-dot" style="background:#1D9E75"></div>click</div>
+              <div class="legend-item"><div class="legend-dot" style="background:#BA7517"></div>purchase</div>
+            </div>
+          </div>
+          <svg width="100%" viewBox="0 0 340 120" style="overflow:visible">
+            <!-- Grid lines -->
+            <line x1="30" y1="10" x2="330" y2="10" stroke="var(--color-border-tertiary)" stroke-width="0.5"/>
+            <line x1="30" y1="35" x2="330" y2="35" stroke="var(--color-border-tertiary)" stroke-width="0.5"/>
+            <line x1="30" y1="60" x2="330" y2="60" stroke="var(--color-border-tertiary)" stroke-width="0.5"/>
+            <line x1="30" y1="85" x2="330" y2="85" stroke="var(--color-border-tertiary)" stroke-width="0.5"/>
+            <!-- Y axis labels -->
+            <text x="24" y="13" text-anchor="end" style="font-size:9px;fill:var(--color-text-tertiary)">8k</text>
+            <text x="24" y="38" text-anchor="end" style="font-size:9px;fill:var(--color-text-tertiary)">6k</text>
+            <text x="24" y="63" text-anchor="end" style="font-size:9px;fill:var(--color-text-tertiary)">4k</text>
+            <text x="24" y="88" text-anchor="end" style="font-size:9px;fill:var(--color-text-tertiary)">2k</text>
+            <!-- Area fills -->
+            <path d="M30,70 L62,55 L94,48 L126,58 L158,40 L190,30 L222,36 L254,25 L286,28 L318,20 L318,110 L30,110Z" fill="#378ADD" class="area-fill"/>
+            <path d="M30,85 L62,78 L94,72 L126,80 L158,65 L190,58 L222,62 L254,52 L286,55 L318,48 L318,110 L30,110Z" fill="#1D9E75" class="area-fill"/>
+            <!-- Lines -->
+            <polyline class="trend-line" stroke="#378ADD" points="30,70 62,55 94,48 126,58 158,40 190,30 222,36 254,25 286,28 318,20"/>
+            <polyline class="trend-line" stroke="#1D9E75" points="30,85 62,78 94,72 126,80 158,65 190,58 222,62 254,52 286,55 318,48"/>
+            <polyline class="trend-line" stroke="#BA7517" stroke-width="1" stroke-dasharray="4 2" points="30,96 62,93 94,90 126,95 158,88 190,84 222,87 254,82 286,84 318,80"/>
+            <!-- X axis labels -->
+            <text x="30" y="115" text-anchor="middle" style="font-size:9px;fill:var(--color-text-tertiary)">5/1</text>
+            <text x="94" y="115" text-anchor="middle" style="font-size:9px;fill:var(--color-text-tertiary)">5/8</text>
+            <text x="158" y="115" text-anchor="middle" style="font-size:9px;fill:var(--color-text-tertiary)">5/15</text>
+            <text x="222" y="115" text-anchor="middle" style="font-size:9px;fill:var(--color-text-tertiary)">5/22</text>
+            <text x="286" y="115" text-anchor="middle" style="font-size:9px;fill:var(--color-text-tertiary)">5/29</text>
+          </svg>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">신규 / 재방문 비율</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:20px;padding:8px 0">
+            <svg width="100" height="100" viewBox="0 0 100 100">
+              <!-- Donut segments -->
+              <circle cx="50" cy="50" r="34" fill="none" stroke="#185FA5" stroke-width="16" stroke-dasharray="134 80" stroke-dashoffset="-20" transform="rotate(-90 50 50)"/>
+              <circle cx="50" cy="50" r="34" fill="none" stroke="#B5D4F4" stroke-width="16" stroke-dasharray="80 134" stroke-dashoffset="-154" transform="rotate(-90 50 50)"/>
+              <text x="50" y="47" text-anchor="middle" style="font-size:14px;font-weight:500;fill:var(--color-text-primary)">62%</text>
+              <text x="50" y="60" text-anchor="middle" style="font-size:9px;fill:var(--color-text-tertiary)">신규</text>
+            </svg>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div>
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+                  <div style="width:10px;height:10px;border-radius:2px;background:#185FA5"></div>
+                  <span style="font-size:11px;color:var(--color-text-secondary)">신규 유저</span>
+                </div>
+                <span style="font-size:16px;font-weight:500;color:var(--color-text-primary)">62%</span>
+                <span style="font-size:10px;color:var(--color-text-tertiary);margin-left:4px">23,851명</span>
+              </div>
+              <div>
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+                  <div style="width:10px;height:10px;border-radius:2px;background:#B5D4F4"></div>
+                  <span style="font-size:11px;color:var(--color-text-secondary)">재방문 유저</span>
+                </div>
+                <span style="font-size:16px;font-weight:500;color:var(--color-text-primary)">38%</span>
+                <span style="font-size:10px;color:var(--color-text-tertiary);margin-left:4px">14,619명</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom: Funnel + Top Pages -->
+      <div class="bottom-row">
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">전환 퍼널</span>
+            <span style="font-size:10px;color:var(--color-text-tertiary)">VIEW → CLICK → PURCHASE</span>
+          </div>
+          <svg width="100%" viewBox="0 0 240 120">
+            <!-- Funnel bars centered -->
+            <rect x="10" y="10" width="220" height="26" rx="5" fill="#185FA5" opacity="0.9"/>
+            <rect x="30" y="44" width="170" height="26" rx="5" fill="#378ADD" opacity="0.9"/>
+            <rect x="70" y="78" width="90" height="26" rx="5" fill="#85B7EB" opacity="0.9"/>
+            <!-- Labels -->
+            <text x="120" y="27" text-anchor="middle" style="font-size:10px;font-weight:500;fill:#E6F1FB">page_view · 204,893</text>
+            <text x="115" y="61" text-anchor="middle" style="font-size:10px;font-weight:500;fill:#E6F1FB">click · 87,240  (42.6%)</text>
+            <text x="115" y="95" text-anchor="middle" style="font-size:10px;font-weight:500;fill:#042C53">purchase · 7,581  (8.7%)</text>
+          </svg>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">상위 페이지 TOP 5</span>
+          </div>
+          <svg width="100%" viewBox="0 0 240 120">
+            <!-- Bar chart horizontal -->
+            <text x="0" y="15" style="font-size:9px;fill:var(--color-text-tertiary)">/home</text>
+            <rect x="50" y="6" width="148" height="12" rx="3" fill="#378ADD" opacity="0.85"/>
+            <text x="204" y="15" style="font-size:9px;fill:var(--color-text-secondary)">14.8k</text>
+
+            <text x="0" y="35" style="font-size:9px;fill:var(--color-text-tertiary)">/products</text>
+            <rect x="50" y="26" width="112" height="12" rx="3" fill="#378ADD" opacity="0.7"/>
+            <text x="168" y="35" style="font-size:9px;fill:var(--color-text-secondary)">11.2k</text>
+
+            <text x="0" y="55" style="font-size:9px;fill:var(--color-text-tertiary)">/cart</text>
+            <rect x="50" y="46" width="76" height="12" rx="3" fill="#378ADD" opacity="0.55"/>
+            <text x="132" y="55" style="font-size:9px;fill:var(--color-text-secondary)">7.6k</text>
+
+            <text x="0" y="75" style="font-size:9px;fill:var(--color-text-tertiary)">/checkout</text>
+            <rect x="50" y="66" width="50" height="12" rx="3" fill="#378ADD" opacity="0.4"/>
+            <text x="106" y="75" style="font-size:9px;fill:var(--color-text-secondary)">5.0k</text>
+
+            <text x="0" y="95" style="font-size:9px;fill:var(--color-text-tertiary)">/search</text>
+            <rect x="50" y="86" width="36" height="12" rx="3" fill="#378ADD" opacity="0.28"/>
+            <text x="92" y="95" style="font-size:9px;fill:var(--color-text-secondary)">3.6k</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
