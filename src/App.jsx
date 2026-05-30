@@ -15,6 +15,7 @@ import GlobalStyle from './GlobalStyle';
 import { ToastContainer } from 'react-toastify';
 import { ThemeProvider } from 'styled-components';
 import { darkTheme, lightTheme } from './themes';
+import DataFactory from './pages/DataFactory/DataFactory.jsx'
 
 function App() {
   const [isDark, setIsDark] = useState(true);
@@ -33,6 +34,7 @@ function App() {
             <Route path="/events" element={<Event />} />
             <Route path="/shop" element={<List />} />
             <Route path="/shop/:detail" element={<Detail />} />
+            <Route path="/data" element={<DataFactory />} />
           </Routes>
         </Center>
         <ToastContainer />
