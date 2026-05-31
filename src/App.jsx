@@ -10,37 +10,50 @@ import { BrowserRouter, Route, Router, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 import GlobalStyle from './GlobalStyle';
 import { ToastContainer } from 'react-toastify';
-import { ThemeProvider } from 'styled-components';
-import { darkTheme, lightTheme } from './theme';
 import DataFactory from './pages/DataFactory/DataFactory.jsx'
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { ThemeProvider as StyledThemeProvider } from 'styled-components';
+import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
+import {  baseTheme, lightTheme, darkTheme  } from './styles/tokens.js';
+import { createStyledTheme } from './styles/styledTheme.js';
+import { createMuiTheme } from './styles/muiTheme.js';
+
 
 function App() {
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(false);
   const toggleTheme = () => setIsDark(!isDark);
-
+  const theme = {
+    ...baseTheme,
+    colors: isDark ? darkTheme.colors : lightTheme.colors
+  }
   return (
-    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-      <BrowserRouter>
-        <GlobalStyle />
-        <Sidebar onToggleTheme={toggleTheme} />
-        <Center>
-          <Routes>
-            <Route path="/" element={<Overview />} />
-            <Route path="/users" element={<User />} />
-            <Route path="/events" element={<Event />} />
-            <Route path="/shop" element={<List />} />
-            <Route path="/shop/:detail" element={<Detail />} />
-            <Route path="/data" element={<DataFactory />} />
-          </Routes>
-        </Center>
-        <ToastContainer />
-      </BrowserRouter>
-    </ThemeProvider>
+    <StyledThemeProvider theme={createStyledTheme(theme)}>
+      <MuiThemeProvider theme={createMuiTheme(theme)}>
+        <BrowserRouter>
+          <GlobalStyle />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <Sidebar onToggleTheme={toggleTheme} isDark={isDark} />
+          <Center>
+            <Routes>
+              <Route path="/" element={<Overview />} />
+              <Route path="/users" element={<User />} />
+              <Route path="/events" element={<Event />} />
+              <Route path="/shop" element={<List />} />
+              <Route path="/shop/:detail" element={<Detail />} />
+              <Route path="/data" element={<DataFactory />} />
+            </Routes>
+          </Center>
+          </LocalizationProvider>
+          <ToastContainer />
+        </BrowserRouter>
+      </MuiThemeProvider>
+    </StyledThemeProvider>
   );
 }
 
 export default App;
 
 const Center = styled.div`
-  margin-left: 200px;
+  margin-left: 300px;
 `;

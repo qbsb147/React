@@ -86,7 +86,7 @@ const Overview = () => {
 
   return (
     <Container>
-      <KPI title="오늘 방문자 수" value={1284} content="전일 대비" diff="+8.2%" color />
+      <KPI title="오늘 방문자 수" value={1284} content="전일 대비" diff="+8.2%" />
       <canvas
         style={{
           width: '500px',
