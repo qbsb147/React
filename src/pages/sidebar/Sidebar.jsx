@@ -49,6 +49,20 @@ const Sidebar = ({ onToggleTheme, isDark }) => {
       [key] : !prev[key],
     }));
   }
+  const init = () => {
+    setEventChecked(
+      Object.fromEntries(
+        Object.keys(eventChecked).map(key => [key, true]),
+      )
+    );
+    setUserChecked(
+      Object.fromEntries(
+        Object.keys(userChecked).map(key => [key, true]),
+      )
+    );
+    setStartDate(dayjs().subtract(1,'M'));
+    setEndDate(dayjs());
+  }
 
   const eventChk = (
     <Box sx={{ display: 'flex', flexDirection: 'row'}}>
@@ -125,6 +139,7 @@ const Sidebar = ({ onToggleTheme, isDark }) => {
             label="시작 시점"
             name="start"
             defaultValue={startDate}
+            value={startDate}
             onChange={(newValue)=>setStartDate(newValue)}
             maxDateTime={endDate}
             slotProps={{
@@ -146,7 +161,9 @@ const Sidebar = ({ onToggleTheme, isDark }) => {
             label="종류 시점"
             name="end"
             defaultValue={endDate}
+            value={endDate}
             onChange={(newValue)=>setEndDate(newValue)}
+            minDateTime={startDate}
             disableFuture
             slotProps={{
               textField:{
@@ -198,7 +215,7 @@ const Sidebar = ({ onToggleTheme, isDark }) => {
           </FormGroup>
           </div>
         </Filter>
-        <Button size="small" variant="outlined">초기화</Button>
+        <Button size="small" variant="outlined" onClick={init}>초기화</Button>
     </Container>
   );
 };
