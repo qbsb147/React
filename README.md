@@ -13,6 +13,9 @@
 
 ### **[💾 브랜치 전략](./docs/git/branch.md)**: 브랜치 전략
 
+### **[🛠️ Pull Request](./docs/git/PullRequest.md)** : PullRequest 참고 문서
+
+### **[ERD](https://www.erdcloud.com/d/WvpDhQkwQfh2YSfGu)**: ERD 다이어그램
 ## 📌 학습 목표
 
 1. **React 개념 정리**
