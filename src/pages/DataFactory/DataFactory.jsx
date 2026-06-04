@@ -11,20 +11,20 @@ const DataFactory = () => {
       const lastIdx = await dataService.getUserLastIndex();
       for (let i = lastIdx; i < lastIdx+30; i++) {
         const user = {
-          user_no   : i,
-          user_id   : Array.from({length:8} , () => alpha[randomNum(0,alpha.length-1)]).join('')  + i ,
-          user_pwd  : Array.from({length:10}, () => alpha[randomNum(0,alpha.length-1)]).join('') + i ,
-          user_name : Array.from({length:10}, () => alpha[randomNum(0,alpha.length-1)]).join(''),
-          nick_name : Array.from({length:15}, () => alpha[randomNum(0,alpha.length-1)]).join(''),
-          email     : Array.from({length:10}, () => alpha[randomNum(0,alpha.length-1)]).join('') + i + 
-                      '@' + 
-                      Array.from({length:randomNum(5,8)}, () => alpha[randomNum(0,25)]).join('') +
-                      '.' +
-                      TLD[randomNum(0,TLD.length-1)],
-          address   : KoAddress[randomNum(0,KoAddress.length-1)],
-          
-          create_at : Date.now(),
-          update_at : Date.now(),
+          user_no     : i,
+          user_id     : Array.from({length:8} , () => alpha[randomNum(0,alpha.length-1)]).join('')  + i ,
+          user_pwd    : Array.from({length:10}, () => alpha[randomNum(0,alpha.length-1)]).join('') + i ,
+          user_name   : Array.from({length:10}, () => alpha[randomNum(0,alpha.length-1)]).join(''),
+          nick_name   : Array.from({length:15}, () => alpha[randomNum(0,alpha.length-1)]).join(''),
+          email       : Array.from({length:10}, () => alpha[randomNum(0,alpha.length-1)]).join('') + i + 
+                        '@' + 
+                        Array.from({length:randomNum(5,8)}, () => alpha[randomNum(0,25)]).join('') +
+                        '.' +
+                        TLD[randomNum(0,TLD.length-1)],
+          address     : KoAddress[randomNum(0,KoAddress.length-1)],
+          access_time : Date.now(),
+          create_at   : Date.now(),
+          update_at   : Date.now(),
         };
         await dataService.generateDummyUser(user)
       }

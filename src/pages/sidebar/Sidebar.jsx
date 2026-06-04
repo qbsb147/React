@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FaMoon, FaSun } from 'react-icons/fa';
 import styled from 'styled-components';
 import barChartImg from '../../assets/barChart.png'
@@ -17,22 +17,21 @@ import { MdOutlineDarkMode } from "react-icons/md";
 import { CiLight } from "react-icons/ci";
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
+import { 
+  startTime, 
+  setStartTime, 
+  endTime, 
+  setEndTime, 
+  events, 
+  setEvents, 
+  users, 
+  setUsers
+} from '../../store/filterStore';
 
 const Sidebar = ({ onToggleTheme, isDark }) => {
-  const [endDate,setEndDate] = useState(dayjs());
-  const [startDate,setStartDate] = useState(dayjs().subtract(1,'M'));
-  const [eventChecked, setEventChecked] = useState({
-    view : true,
-    click : true,
-    purchase : true,
-  })
-  const [userChecked, setUserChecked] = useState({
-    newUser : true,
-    existingUser : true,
-  })
 
-  const eventValues = Object.values(eventChecked);
-  const userValues = Object.values(userChecked);
+  const eventValues = Object.values(events);
+  const userValues = Object.values(users);
 
   const checkHandle = ({key, checked, setChecked}) => {
     if(key==='all'){
@@ -50,33 +49,33 @@ const Sidebar = ({ onToggleTheme, isDark }) => {
     }));
   }
   const init = () => {
-    setEventChecked(
+    setEvents(
       Object.fromEntries(
-        Object.keys(eventChecked).map(key => [key, true]),
+        Object.keys(events).map(key => [key, true]),
       )
     );
-    setUserChecked(
+    setUsers(
       Object.fromEntries(
-        Object.keys(userChecked).map(key => [key, true]),
+        Object.keys(users).map(key => [key, true]),
       )
     );
-    setStartDate(dayjs().subtract(1,'M'));
-    setEndDate(dayjs());
+    setStartTime(dayjs().subtract(1,'M'));
+    setEndTime(dayjs());
   }
 
   const eventChk = (
     <Box sx={{ display: 'flex', flexDirection: 'row'}}>
       <FormControlLabel
         label="노출"
-        control={<Checkbox checked={eventChecked.view} onChange={() => checkHandle({key: 'view', checked : eventChecked, setChecked : setEventChecked})} />}
+        control={<Checkbox checked={events.view} onChange={() => checkHandle({key: 'view', checked : events, setChecked : setEvents})} />}
       />
       <FormControlLabel
         label="조회"
-        control={<Checkbox checked={eventChecked.click} onChange={() => checkHandle({key: 'click', checked : eventChecked, setChecked : setEventChecked})} />}
+        control={<Checkbox checked={events.click} onChange={() => checkHandle({key: 'click', checked : events, setChecked : setEvents})} />}
       />
       <FormControlLabel
         label="구매"
-        control={<Checkbox checked={eventChecked.purchase} onChange={() => checkHandle({key: 'purchase', checked : eventChecked, setChecked : setEventChecked})} />}
+        control={<Checkbox checked={events.purchase} onChange={() => checkHandle({key: 'purchase', checked : events, setChecked : setEvents})} />}
       />
     </Box>
   )
@@ -85,11 +84,11 @@ const Sidebar = ({ onToggleTheme, isDark }) => {
     <Box sx={{ display: 'flex', flexDirection: 'column'}}>
       <FormControlLabel
         label="신규 사용자"
-        control={<Checkbox checked={userChecked.newUser} onChange={() => checkHandle({key : 'newUser', checked : userChecked, setChecked : setUserChecked})} />}
+        control={<Checkbox checked={users.newUser} onChange={() => checkHandle({key : 'newUser', checked : users, setChecked : setUsers})} />}
       />
       <FormControlLabel
         label="기존 사용자"
-        control={<Checkbox checked={userChecked.existingUser} onChange={() => checkHandle({key : 'existingUser', checked : userChecked, setChecked : setUserChecked})} />}
+        control={<Checkbox checked={users.existingUser} onChange={() => checkHandle({key : 'existingUser', checked : users, setChecked : setUsers})} />}
       />
     </Box>
   )
@@ -138,10 +137,10 @@ const Sidebar = ({ onToggleTheme, isDark }) => {
           <DateTimePicker 
             label="시작 시점"
             name="start"
-            defaultValue={startDate}
-            value={startDate}
-            onChange={(newValue)=>setStartDate(newValue)}
-            maxDateTime={endDate}
+            defaultValue={startTime}
+            value={startTime}
+            onChange={(newValue)=>setStartTime(newValue)}
+            maxDateTime={endTime}
             slotProps={{
               textField:{
                 variant: 'filled',
@@ -160,10 +159,10 @@ const Sidebar = ({ onToggleTheme, isDark }) => {
           <DateTimePicker 
             label="종류 시점"
             name="end"
-            defaultValue={endDate}
-            value={endDate}
-            onChange={(newValue)=>setEndDate(newValue)}
-            minDateTime={startDate}
+            defaultValue={endTime}
+            value={endTime}
+            onChange={(newValue)=>setEndTime(newValue)}
+            minDateTime={startTime}
             disableFuture
             slotProps={{
               textField:{
@@ -189,9 +188,9 @@ const Sidebar = ({ onToggleTheme, isDark }) => {
               label="전체선택"
               control={
                 <Checkbox
-                  checked={eventChecked.view && eventChecked.click && eventChecked.purchase}
+                  checked={events.view && events.click && events.purchase}
                   indeterminate={!eventValues.every(Boolean)&&!eventValues.every(v=>!v)}
-                  onChange={() => checkHandle({key: 'all', checked : eventChecked, setChecked : setEventChecked})}
+                  onChange={() => checkHandle({key: 'all', checked : events, setChecked : setEvents})}
                 />
               }
             />
@@ -205,9 +204,9 @@ const Sidebar = ({ onToggleTheme, isDark }) => {
               label="전체선택"
               control={
                 <Checkbox
-                  checked={userChecked.newUser && userChecked.existingUser}
+                  checked={users.newUser && users.existingUser}
                   indeterminate={!userValues.every(Boolean)&&!userValues.every(v=>!v)}
-                  onChange={() => checkHandle({key : 'all', checked : userChecked, setChecked : setUserChecked})}
+                  onChange={() => checkHandle({key : 'all', checked : users, setChecked : setUsers})}
                 />
               }
             />
