@@ -34,10 +34,14 @@ export const API_ENDPOINTS = {
     DUMMY_SALES_RECORD: `/sale_record`,
   },
   EVENT: {
-    RANGE : ({startDate,endDate})         => `/event?_where={"and":[{"create_at":{"gt"${startDate}}},{"create_at":{"lt":${endDate}}}]}`,
-    TYPE  : ({startDate, endDate, type})  => `/event?_where={"and":[{"create_at":{"gt"${startDate}}},{"create_at":{"lt":${endDate}}},{"type":{"eq":${type}}}]}`,
+    RANGE: ({ startDate, endDate })       => `/event?create_at:gt=${startDate}&create_at:lt=${endDate}`,
+    TYPE: ({ startDate, endDate, type })  => `/event?create_at:gt=${startDate}&create_at:lt=${endDate}&type=${type}`,
   },
+
   USER: {
-    ACCESS:({startDate,endDate})          => `/user?_where={"and":[{"access_time":{"gt"${startDate}}},{"access_time":{"lt":${endDate}}}]}`
+    ACCESS: ({ startDate, endDate })      => `/user?access_time:gt=${startDate}&access_time:lt=${endDate}`,
+  },
+  BOARD: {
+    GET:(board_no)                        => `/board?board_no:eq=${board_no}`
   }
 };

@@ -15,6 +15,18 @@ export const useFilterStore = create((set) => ({
                     },
     setStartTime    : (date) => set({startTime  : date}),
     setEndTime      : (date) => set({endTime    : date}),
-    setEvents       : (data) => set({events     : data}),
-    setUsers        : (data) => set({users      : data}),
-}));
+    setEvents       : (updater) => 
+                        set((state) => ({
+                            events:
+                                typeof updater === 'function'
+                                ? updater(state.events)
+                                : updater,
+                        })),
+    setUsers        : (updater) =>
+                        set((state) => ({
+                            users:
+                                typeof updater === 'function'
+                                ? updater(state.users)
+                                : updater,
+                        })),
+                    }))

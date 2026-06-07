@@ -17,7 +17,10 @@ import { MdOutlineDarkMode } from "react-icons/md";
 import { CiLight } from "react-icons/ci";
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
-import { 
+import { useFilterStore } from '../../store/filterStore'
+
+const Sidebar = ({ onToggleTheme, isDark }) => {
+  const {
   startTime, 
   setStartTime, 
   endTime, 
@@ -26,10 +29,7 @@ import {
   setEvents, 
   users, 
   setUsers
-} from '../../store/filterStore';
-
-const Sidebar = ({ onToggleTheme, isDark }) => {
-
+  } = useFilterStore()
   const eventValues = Object.values(events);
   const userValues = Object.values(users);
 
@@ -117,7 +117,7 @@ const Sidebar = ({ onToggleTheme, isDark }) => {
               <Content>사용자 분석</Content>
             </Item>
           </Link>
-          <Link to="/evnets">
+          <Link to="/events">
             <Item>
               <GoZap />
               <Content>이벤트 분석</Content>
@@ -241,13 +241,13 @@ const Filter = styled.div`
 const Page = styled.div`
   width: 100%;
   height: 40%;
-  padding: 0px, 20px;
+  padding: 0px 20px;
 `
 
 const Item = styled.button`
   width: 100%;
   height: 40px;
-  margin: 30px, 0px;
+  margin: 30px 0px;
   background-color: transparent;
   display: flex;
   align-items: center;
