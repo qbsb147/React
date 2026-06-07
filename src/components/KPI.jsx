@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { IconArrowUp } from '@tabler/icons-react';
 
 export const KPI = ({ title, value, content, diff, color = 'default' }) => {
-  const status = diff?.startsWith('-') ? 'down' : 'up';
+  const status = diff<0 ? 'down' : 'up';
   const formatNumber = (value) => {
     if (typeof value !== 'number') return value;
     return value.toLocaleString();

@@ -8,6 +8,7 @@ export const overviewService = {
         const response = await axiosInstance.get(
             API_ENDPOINTS.EVENT.RANGE({startDate,endDate})
         )
+        console.log("response.data",response.data)
         return response.data;
     },
     //기간 내 전체 사용자 조회
@@ -23,5 +24,13 @@ export const overviewService = {
             API_ENDPOINTS.EVENT.TYPE({startDate,endDate,type})
         )
         return response.data;
+    },
+    //게시글 하나 가져오기
+    getBoard : async(board_no) => {
+        const response = await axiosInstance.get(
+            API_ENDPOINTS.BOARD.GET(board_no)
+        )
+        console.log("ege", response.data)
+        return response.data[0];
     }
 }

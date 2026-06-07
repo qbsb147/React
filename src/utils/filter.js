@@ -25,8 +25,20 @@ export const userTypeFilter = ({data, type}) => {
     ))
 };
 
+export const userAccessFilter = ({data, startDate, endDate}) => {
+    return data.filter((entry)=>(
+        entry.access_time >startDate && entry.access_time<=endDate
+    ));
+}
+
+export const eventDateFilter = ({data, startDate, endDate}) => {
+    return data.filter((entry)=>(
+        entry.create_at >startDate && entry.create_at<=endDate
+    ));
+}
+
 export const userDateFilter = ({data, startDate, endDate}) => {
     return data.filter((entry)=>(
-        entry.access_time >=startDate && entry.access_time<=endDate
+        entry.create_at >startDate && entry.create_at<=endDate
     ));
 }

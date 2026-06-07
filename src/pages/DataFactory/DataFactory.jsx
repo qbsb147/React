@@ -70,12 +70,13 @@ const DataFactory = () => {
           user_no     : userIdxList [randomNum(0, userIdxList.length-1)],
           board_no    : boardIdxList[randomNum(0, boardIdxList.length-1)],
           type        : type        [randomNum(0, type.length-1)],
-          create_at   : thumbnail   [randomNum(0, thumbnail.length-1)],
+          create_at   : Date.now(),
         };
         await dataService.generateDummyEvent(event);
       }
       toast.info("이벤트 더미데이터 생성 성공")
-    } catch {
+    } catch (e){
+      console.log("e",e)
       toast.error("이벤트 더미데이터 생성 실패")
     }
   }

@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { userService } from '../../api/user';
-import {startTime, endTime, users} from '../../store/filterStore'
-import { userDateFilter, userTypeFilter } from '../../utils/filter'
+import { useFilterStore } from '../../store/filterStore'
+import { userAccessFilter, userTypeFilter } from '../../utils/filter'
 
 const User = () => {
+  const { startTime, endTime, users } = useFilterStore()
   const [userList, setUserList] = useState([]);
   const [monthUser, setMonthUser] = useState([]);
   const {newUser, existingUser} = useMemo(()=> {
@@ -52,22 +53,22 @@ const User = () => {
       end.setDate(last.getDate() - 7*i);
       preStart.setDate(last.getDate() - 7*(i+2) + 1);
       preEnd.setDate(last.getDate() - 7*(i+1));
-      const newUser = userDateFilter({
+      const newUser = userAccessFilter({
         data: newUserAll,
         startDate: start.getTime(), 
         endDate: end.getTime()
       })
-      const existingUser = userDateFilter({
+      const existingUser = userAccessFilter({
         data: existingUserAll, 
         startDate: start.getTime(), 
         endDate: end.getTime()
       })
-      const curWeekUser = userDateFilter({
+      const curWeekUser = userAccessFilter({
         data: userList,
         startDate: start.getTime(),
         endDate: end.getTime()
       })
-      const preWeekUser = userDateFilter({
+      const preWeekUser = userAccessFilter({
         data: userList,
         startDate: preStart.getTime(),
         endDate: preEnd.getTime()
