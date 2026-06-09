@@ -1,20 +1,29 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { userService } from '../../api/user';
 import { useFilterStore } from '../../store/filterStore'
-import { userAccessFilter, userTypeFilter } from '../../utils/filter'
+import { userAccessFilter, userDateFilter, userTypeFilter } from '../../utils/filter'
+import { eventService } from '../../api/event';
 
 const User = () => {
   const { startTime, endTime, users } = useFilterStore()
-  const [userList, setUserList] = useState([]);
+  const startTs = startTime.valueOf();
+  const endTs = endTime.valueOf();
+  
+  const [allUser, setAllUser] = useState([]);
   const [monthUser, setMonthUser] = useState([]);
-  const {newUser, existingUser} = useMemo(()=> {
-    return{
-      newUser : userTypeFilter({data: userList, type:'newUser'}),
-      existingUser : userTypeFilter({data: userList, type:'existingUser'}),
-    };
-  },[userList])
   const [visitTable, setVisitTable] = useState([]);
   const [userChart, setUserChart] = useState([]);
+  const [userListInDate, setUserListInDate] = useState([]);
+  const [eventInDate, setEventInDate] = useState([]);
+  const [userEvents, setUserEvents] = useState([]);
+  const userEventMap = useRef(new Map());
+
+  const {newUserInDate, existingUserInDate} = useMemo(() => {
+    return{
+      newUserInDate       : userTypeFilter({data: userListInDate, type:'newUser'}),
+      existingUserInDate  : userTypeFilter({data: userListInDate, type:'existingUser'}),
+    };
+  },[userListInDate])
 
   const getRevisitRate = ({preWeek, curWeek}) => {
     const preUserSet = new Set(preWeek.map((user) => user.user_no));
@@ -64,12 +73,12 @@ const User = () => {
         endDate: end.getTime()
       })
       const curWeekUser = userAccessFilter({
-        data: userList,
+        data: userListInDate,
         startDate: start.getTime(),
         endDate: end.getTime()
       })
       const preWeekUser = userAccessFilter({
-        data: userList,
+        data: userListInDate,
         startDate: preStart.getTime(),
         endDate: preEnd.getTime()
       })
@@ -84,12 +93,71 @@ const User = () => {
     return table.reverse();
   }
 
-  useEffect(()=> {
-    userService
-    .getUsers({startDate : startTime, endDate : endTime})
-    .then((data)=> {setUserList(data)})
-    .catch((e)=> console.log(e));
-  },[startTime, endTime])
+  const getUserId = async(user_no) => {
+    const user = await userService.getUser(user_no);
+    return user.user_id;
+  }
+
+  const changeTop10FromEvent = async (type) => {
+    const entries = Array.from(userEventMap.current);
+    let sorted = [];
+    if(type === 'all') {
+      sorted = entries.sort(function(a,b){
+                        return b[1].event - a[1].event
+                      })
+    } else if(type === 'view') {
+      sorted = entries.sort(function(a,b){
+                        return b[1].view - a[1].view
+                      })
+    } else if(type === 'click') {
+      sorted = entries.sort(function(a,b){
+                        return b[1].click - a[1].click
+                      })
+    } else if(type === 'purchase') {
+      sorted = entries.sort(function(a,b){
+                        return b[1].purchase - a[1].purchase
+                      })
+    }
+    const listTop10 = await Promise.all(
+      sorted
+      .slice(0,10)
+      .map(async([key, value])=> ({
+        user_id   : await getUserId(key),
+        view      : value.view,
+        click     : value.click,
+        purchase  : value.purchase,
+        event     : value.event,
+      }))
+    )
+
+    setUserChart(listTop10);
+  }
+
+  //날짜 변경시
+  useEffect(()=>{
+    setUserListInDate(userDateFilter({data: allUser, startDate : startTs, endDate : endTs}));
+    eventService.getEventsInDate({startDate: startTs, endDate: endTs})
+                .then((data)=> {
+                  setEventInDate(data)
+                  
+                  eventInDate.forEach(item => {
+                    if(!userEventMap.current.has(item.user_no)) 
+                      userEventMap.current.set(item.user_no, 
+                        {view: 0, click: 0, purchase: 0, event: 0}
+                      )
+                    
+                    const prev = userEventMap.current.get(item.user_no);
+
+                    userEventMap.current.set(item.user_no, {
+                      view:     prev.view       + (item.type==='view'), 
+                      click:    prev.click      + (item.type==='click'), 
+                      purchase: prev.purchase   + (item.type==='purchase'), 
+                      event:    prev.event      + 1, 
+                    })
+                  })
+                })
+                .catch(console.log)
+  },[startTime, endTime, allUser])
 
   //초기 실행
   useEffect(()=> {
@@ -102,9 +170,12 @@ const User = () => {
     start.setDate(end.getDate() - 35);
     start.setHours(0,0,0,0);
     userService
-    .getUsers({startDate : start.getTime(), endDate : end.getTime()})
-    .then((data)=> {setMonthUser(data)})
-    .then(()=> {setVisitTable(getVisitTable())})
+    .getAllUsers()
+    .then((data)=> {
+      setAllUser(data);
+      setMonthUser(userDateFilter({data: data, startDate: start, endDate: end}));
+      setVisitTable(getVisitTable());
+    })
     .catch((e)=> console.log(e));
   },[])
 

@@ -40,10 +40,12 @@ export const API_ENDPOINTS = {
   },
 
   USER: {
+    ALL : () => `/user`,
     ACCESS: ({ startDate, endDate })      => `/user?access_time:gt=${startDate}&access_time:lt=${endDate}`,
+    GET : (user_no)                       => `/user?user_no:eq=${user_no}`
   },
   
   BOARD: {
-    GET:(board_no)                        => `/board?board_no:eq=${board_no}`
+    GET:(board_no)                        => `/board?board_no:eq=${board_no}`,
   }
 };

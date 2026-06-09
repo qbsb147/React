@@ -2,26 +2,32 @@ import axiosInstance from './axios';
 import { API_ENDPOINTS } from './config';
 
 export const userService = {
-    //KPI 영역
+    //모든 사용자 조회
+    getAllUsers : async() => {
+        const response = await axiosInstance.get(
+            API_ENDPOINTS.USER.ALL()
+        )
+        return response.data;
+    },
     //기간 내 전체 이벤트 조회
-    getEvents : async({startDate, endDate}) => {
+    getEventsInDate : async({startDate, endDate}) => {
         const response = await axiosInstance.get(
             API_ENDPOINTS.EVENT.RANGE({startDate,endDate})
         )
         return response.data;
     },
     //기간 내 전체 사용자 조회
-    getUsers : async({startDate, endDate}) => {
+    getUsersInDate : async({startDate, endDate}) => {
         const response = await axiosInstance.get(
             API_ENDPOINTS.USER.ACCESS({startDate,endDate})
         )
         return response.data;
     },
-    //이벤트 타입별 조회
-    getEventType : async({startDate, endDate, type}) => {
+    //사용자 조회
+    getUser : async(user_no) => {
         const response = await axiosInstance.get(
-            API_ENDPOINTS.EVENT.TYPE({startDate,endDate,type})
+            API_ENDPOINTS.USER.GET(user_no)
         )
-        return response.data;
+        return response.data[0];
     }
 }
