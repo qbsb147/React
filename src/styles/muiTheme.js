@@ -1,6 +1,7 @@
 import { createTheme } from '@mui/material/styles';
 
 export const createMuiTheme = (modeTheme) => {
+  const base = createTheme();
   return createTheme({
     palette: {
       // =====================
@@ -92,7 +93,7 @@ export const createMuiTheme = (modeTheme) => {
     // =====================
     // 🎯 Shadows
     // =====================
-    shadows: modeTheme.shadows,
+    shadows: base.shadows,
 
     // =====================
     // 🎯 Spacing

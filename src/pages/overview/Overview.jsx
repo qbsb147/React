@@ -9,8 +9,10 @@ import PieWithGradient from '../../components/PieChart';
 import { eventService } from '../../api/event';
 import { userService } from '../../api/user';
 import { boardService } from '../../api/board';
+import { useTheme } from 'styled-components';
 
 const Overview = () => {
+  const theme = useTheme();
   const { startTime, endTime, users, events } = useFilterStore()
   const startTs = startTime.valueOf()
   const endTs = endTime.valueOf()
@@ -75,7 +77,7 @@ const Overview = () => {
 
     return [
       {name: '신규 사용자', value: newUser.length},
-      {name: '기존 사용자', value: existingUser.length},
+      {name: '기존 사용자', value: 100},
     ]
   },[twoMonthUserList])
 
@@ -312,10 +314,16 @@ const Overview = () => {
             responsive
         >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis type="number" />
+        <XAxis 
+        type="number" 
+        stroke={theme.colors.line}
+        />
         <YAxis
           dataKey="board_name"
           type="category"
+          stroke={theme.colors.line}
+          width={400}
+          tick
         />
         <Legend />
         <Tooltip />
@@ -366,7 +374,7 @@ const Overview = () => {
           >
             <LabelList
               dataKey="name"
-              fill="#000"
+              fill= {theme.colors.text.primary}
               position="right"
               stroke="none"
             />

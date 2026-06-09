@@ -141,6 +141,7 @@ export const lightTheme = {
     
 
     border: '#E4E7EC',
+    line: '#111827',
     inputFocus: '#93C5FD',
 
     text: {
@@ -206,6 +207,7 @@ export const darkTheme = {
     activeNav: '#e6f1fb', // Active Nav BG
     inputFocus: '#395fb6',
     border: '#30363D',
+    line: '#E6EDF3',
     borderActive: '#1D4ED8',
 
     text: {
