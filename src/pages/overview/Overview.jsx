@@ -4,8 +4,9 @@ import { KPI } from '../../components/KPI';
 import Chart from 'chart.js/auto';
 import { overviewService } from '../../api/overview';
 import { useFilterStore } from '../../store/filterStore'
-import { userFilter, eventFilter, eventTypeFilter, userAccessFilter, eventDateFilter, userDateFilter } from '../../utils/filter';
-import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { userFilter, eventFilter, eventTypeFilter, userAccessFilter, eventDateFilter, userDateFilter, userTypeFilter } from '../../utils/filter';
+import { Bar, BarChart, CartesianGrid, Funnel, FunnelChart, LabelList, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import PieWithGradient from '../../components/PieChart';
 
 const Overview = () => {
   const { startTime, endTime, users, events } = useFilterStore()
@@ -13,7 +14,6 @@ const Overview = () => {
   const endTs = endTime.valueOf()
   const now = new Date();
   const nowTimeStamp = Date.now();
-  const [purchaseRate, setPurchaseRate] = useState(0);
   const [top5, setTop5] = useState([]);
   const [userThisMonthVisited, setUserThisMonthVisited] = useState([]);
   const [userLastMonthVisited, setUserLastMonthVisited] = useState([]);
@@ -26,7 +26,7 @@ const Overview = () => {
   const [eventList, setEventList] = useState([]);
   const [userList, setUserList] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [funnul, setFunnel] = useState({
+  const [funnel, setFunnel] = useState({
     view      : 0,
     click     : 0,
     purchase  : 0,
@@ -48,29 +48,6 @@ const Overview = () => {
   const clickEventMonthCnt = eventTypeFilter({data: eventThisMonthVisited, type : 'click'}).length
   const purchaseEventMonthCnt = eventTypeFilter({data: eventThisMonthVisited, type : 'purchase'}).length
 
-  const fetchPurchaseRate = async () => {
-    try {
-      const nowStart  = new Date(now.getFullYear(), now.getMonth(), 1);
-      const prevStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-      const prevEnd   = new Date();
-      prevEnd.setMonth(prevEnd.getMonth() - 1);
-      
-      const [nowList, prevList] = await Promise.all([
-        overviewService.getEventType({startDate : nowStart.getTime(),   endDate : nowTimeStamp,       type: "purchase"}),
-        overviewService.getEventType({startDate : prevStart.getTime(),  endDate : prevEnd.getTime(),  type: "purchase"}),
-      ]);
-
-      const nowCnt  = nowList.length
-      const prevCnt = prevList.length
-
-      const purchaseRate =
-        prevCnt === 0 ? 0 : ((nowCnt - prevCnt) / prevCnt) * 100;
-      setPurchaseRate(purchaseRate);
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   const getBoardName = async (board_no) => {
     const board = await overviewService.getBoard(board_no);
     return board.title + " (bno: " + board_no + ")"
@@ -88,37 +65,34 @@ const Overview = () => {
     return Number.isFinite(rate) ? rate : 0;
   }
 
-  //필터 날짜 조정 시
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [events, users] = await Promise.all([
-          overviewService.getEvents({
-            startDate: startTs,
-            endDate: endTs
-          }),
-          overviewService.getUsers({
-            startDate: startTs,
-            endDate: endTs
-          })
-        ]);
+  const pieData = useMemo(()=>{
+    const filteredNewUser = userDateFilter({data: twoMonthUserList, startDate: startTs, endDate: endTs})
+    const filteredExistingUser = userDateFilter({data: twoMonthUserList, startDate: startTs, endDate: endTs})
+    const newUser = userTypeFilter({data: filteredNewUser, type: 'newUser'});
+    const existingUser = userTypeFilter({data: filteredExistingUser, type: 'existingUser'});
 
-        setFunnel({
-          view: eventTypeFilter({ data: events, type: 'view' }),
-          click: eventTypeFilter({ data: events, type: 'click'}),
-          purchase: eventTypeFilter({ data: events, type: 'purchase'})
-        });
+    return [
+      {name: '신규 사용자', value: newUser.length},
+      {name: '기존 사용자', value: existingUser.length},
+    ]
+  },[twoMonthUserList])
 
-        setEventList(events);
-        setUserList(users);
+  const purchaseRate = useMemo(() => {
+    const nowStart  = new Date(now.getFullYear(), now.getMonth(), 1);
+    const prevStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const prevEnd   = new Date();
+    prevEnd.setMonth(prevEnd.getMonth() - 1);
 
-      } catch (e) {
-        console.log(e);
-      }
-    };
+    const filteredNow = eventDateFilter({data: twoMonthEventList, startDate : nowStart.getTime(), endDate : nowTimeStamp});
+    const nowList = userTypeFilter({data: filteredNow, type: "purchase"});
+    const filteredPre = eventDateFilter({data: twoMonthEventList, startDate : prevStart.getTime(), endDate : prevEnd});
+    const prevList = userTypeFilter({data: filteredPre, type: "purchase"});
 
-    fetchData();
-  }, [startTs, endTs]);
+    const nowCnt  = nowList.length
+    const prevCnt = prevList.length
+
+    return prevCnt === 0 ? 0 : ((nowCnt - prevCnt) / prevCnt) * 100;
+  },[twoMonthEventList])
 
   const fetchTop5 = async () => {
     try {
@@ -127,7 +101,8 @@ const Overview = () => {
       const startDate = start;
 
       const freq = {};
-      const list = await overviewService.getEventType({startDate: startDate.getTime(), endDate: nowTimeStamp, type: "click"})
+      const filteredList = eventDateFilter({data: twoMonthEventList, startDate: startDate.getTime(), endDate: nowTimeStamp})
+      const list = eventTypeFilter({data: filteredList, type: "click"})
       list.forEach(item => {
         freq[item.board_no] = ((freq[item.board_no] || 0) + 1);
       });
@@ -148,6 +123,44 @@ const Overview = () => {
     }
   }
 
+  //2달 데이터 가져올 시
+  useEffect(()=>{
+    if(!Array.isArray(twoMonthEventList) || twoMonthEventList.length === 0)return;
+    fetchTop5()
+  }, [twoMonthEventList])
+
+  //필터 날짜 조정 시
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [events, users] = await Promise.all([
+          overviewService.getEvents({
+            startDate: startTs,
+            endDate: endTs
+          }),
+          overviewService.getUsers({
+            startDate: startTs,
+            endDate: endTs
+          })
+        ]);
+
+        setFunnel({
+          view: eventTypeFilter({ data: events, type: 'view' }).length,
+          click: eventTypeFilter({ data: events, type: 'click'}).length,
+          purchase: eventTypeFilter({ data: events, type: 'purchase'}).length
+        });
+
+        setEventList(events);
+        setUserList(users);
+
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    fetchData();
+  }, [startTs, endTs]);
+
   //초기 실행
   useEffect(() => {
 
@@ -159,7 +172,7 @@ const Overview = () => {
     const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
     const thisMonthEnd = new Date();
     const lastMonthStart = new Date(now.getFullYear(), now.getMonth()-1, 1);
-    const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23,59,59,999);
+    const lastMonthEnd = new Date(now.getMonth()-1);
 
     const todayStart = new Date();
     todayStart.setHours(0,0,0,0);
@@ -167,12 +180,11 @@ const Overview = () => {
     const todayEnd = new Date();
 
     const predayStart = new Date();
-    predayStart.setDate(predayStart.getDate()-2);
+    predayStart.setDate(predayStart.getDate()-1);
     predayStart.setHours(0,0,0,0);
     
     const predayEnd = new Date();
     predayEnd.setDate(predayEnd.getDate()-1);
-    predayEnd.setHours(23,59,59,999);
 
     //2달 사용자 전체 조회
     const userPromise = overviewService
@@ -238,12 +250,7 @@ const Overview = () => {
       })
       .catch((e)=> console.log(e));
 
-    const extraPromise = Promise.all([
-      fetchPurchaseRate(),
-      fetchTop5(),
-    ])
-
-    Promise.all([userPromise, eventPromise, extraPromise])
+    Promise.all([userPromise, eventPromise])
     .catch(console.log)
     .finally(()=>{
       setLoading(false);
@@ -275,7 +282,7 @@ const Overview = () => {
       <KPI 
         title="이달 구매 전환율" 
         value={calcRatio(purchaseEventMonthCnt, clickEventMonthCnt)} 
-        content="전월 대비" 
+        content="전월 동기" 
         diff={purchaseRate} 
       />
       <div style={{ width: "100%", height: 300 }}>
@@ -317,6 +324,59 @@ const Overview = () => {
         />
         </BarChart>
       </ResponsiveContainer>
+      </div>
+
+      <div style={{ width: "100%", height: 300 }}>
+      <ResponsiveContainer
+        height={200}
+        width="100%"
+      >
+        <FunnelChart
+          accessibilityLayer
+          data={[
+            {
+              fill: '#E6E6FA',
+              name: 'view',
+              value: funnel.view
+            },
+            {
+              fill: '#C8A2C8',
+              name: 'click',
+              value: funnel.click
+            },
+            {
+              fill: '#8A5FBF',
+              name: 'purchase',
+              value: funnel.purchase
+            }
+          ]}
+        >
+          <Funnel
+            activeShape={{
+              fill: '#6D28D9',
+              stroke: '#38BDF8'
+            }}
+            dataKey="value"
+            isAnimationActive
+            lastShapeType="rectangle"
+            shape={{}}
+            stroke="#424242"
+          >
+            <LabelList
+              dataKey="name"
+              fill="#000"
+              position="right"
+              stroke="none"
+            />
+          </Funnel>
+          <Tooltip />
+        </FunnelChart>
+      </ResponsiveContainer>
+      </div>
+      <div style={{ width: "100%", height: 300 }}>
+      <PieWithGradient
+        data={pieData}
+      />
       </div>
     </Container>
   );
