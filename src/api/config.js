@@ -33,6 +33,7 @@ export const API_ENDPOINTS = {
     LAST_SALES_RECORD: `/sale_record?_sort=-sales_no&_page=1&_per_page=1`,
     DUMMY_SALES_RECORD: `/sale_record`,
   },
+
   EVENT: {
     RANGE: ({ startDate, endDate })       => `/event?create_at:gt=${startDate}&create_at:lt=${endDate}`,
     TYPE: ({ startDate, endDate, type })  => `/event?create_at:gt=${startDate}&create_at:lt=${endDate}&type=${type}`,
@@ -41,6 +42,7 @@ export const API_ENDPOINTS = {
   USER: {
     ACCESS: ({ startDate, endDate })      => `/user?access_time:gt=${startDate}&access_time:lt=${endDate}`,
   },
+  
   BOARD: {
     GET:(board_no)                        => `/board?board_no:eq=${board_no}`
   }
