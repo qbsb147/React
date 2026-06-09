@@ -1,8 +1,10 @@
 import { Pie, PieChart, Sector } from 'recharts';
-
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+import { useTheme } from 'styled-components';
 
 const PieGradient = (props) => {
+  const theme = useTheme();
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+  // const COLORS = [theme.colors.primary, theme.colors.secondary, '#FFBB28', '#FF8042'];
   return (
     <>
       <defs>

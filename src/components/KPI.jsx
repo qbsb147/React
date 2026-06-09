@@ -12,13 +12,15 @@ export const KPI = ({ title, value, content, diff, color = 'default' }) => {
     <Container color={color}>
       <Title>{title}</Title>
       <Value>{formatNumber(value)}</Value>
-      <Delta style={{ color: status === 'up' ? '#3FB950' : '#F85149' }}>
-        <IconArrowUp size={16} />
-        <TextGroup style={{ gap: '1px' }}>
-          <Content status={status}>{content}</Content>
-          <Diff status={status}>{diff}</Diff>
-        </TextGroup>
-      </Delta>
+      {content && 
+        <Delta style={{ color: status === 'up' ? '#3FB950' : '#F85149' }}>
+          <IconArrowUp size={16} />
+          <TextGroup style={{ gap: '1px' }}>
+            <Content status={status}>{content}</Content>
+            <Diff status={status}>{diff}</Diff>
+          </TextGroup>
+        </Delta>
+      }
     </Container>
   );
 };

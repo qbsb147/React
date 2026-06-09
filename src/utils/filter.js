@@ -39,6 +39,6 @@ export const eventDateFilter = ({data, startDate, endDate}) => {
 
 export const userDateFilter = ({data, startDate, endDate}) => {
     return data.filter((entry)=>(
-        entry.create_at >startDate && entry.create_at<=endDate
+        entry.create_at > startDate && entry.create_at<=endDate
     ));
 }

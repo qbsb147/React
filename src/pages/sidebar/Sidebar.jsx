@@ -83,11 +83,11 @@ const Sidebar = ({ onToggleTheme, isDark }) => {
   const userChk = (
     <Box sx={{ display: 'flex', flexDirection: 'column'}}>
       <FormControlLabel
-        label="신규 사용자"
+        label="신규 회원"
         control={<Checkbox checked={users.newUser} onChange={() => checkHandle({key : 'newUser', checked : users, setChecked : setUsers})} />}
       />
       <FormControlLabel
-        label="기존 사용자"
+        label="기존 회원"
         control={<Checkbox checked={users.existingUser} onChange={() => checkHandle({key : 'existingUser', checked : users, setChecked : setUsers})} />}
       />
     </Box>
