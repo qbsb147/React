@@ -2,11 +2,13 @@ import { useEffect, useState, useMemo } from 'react';
 import styled from 'styled-components';
 import { KPI } from '../../components/KPI';
 import Chart from 'chart.js/auto';
-import { overviewService } from '../../api/overview';
 import { useFilterStore } from '../../store/filterStore'
 import { userFilter, eventFilter, eventTypeFilter, userAccessFilter, eventDateFilter, userDateFilter, userTypeFilter } from '../../utils/filter';
 import { Bar, BarChart, CartesianGrid, Funnel, FunnelChart, LabelList, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import PieWithGradient from '../../components/PieChart';
+import { eventService } from '../../api/event';
+import { userService } from '../../api/user';
+import { boardService } from '../../api/board';
 
 const Overview = () => {
   const { startTime, endTime, users, events } = useFilterStore()
@@ -49,7 +51,7 @@ const Overview = () => {
   const purchaseEventMonthCnt = eventTypeFilter({data: eventThisMonthVisited, type : 'purchase'}).length
 
   const getBoardName = async (board_no) => {
-    const board = await overviewService.getBoard(board_no);
+    const board = await boardService.getBoard(board_no);
     return board.title + " (bno: " + board_no + ")"
   }
 
@@ -134,11 +136,11 @@ const Overview = () => {
     const fetchData = async () => {
       try {
         const [events, users] = await Promise.all([
-          overviewService.getEvents({
+          eventService.getEventsInDate({
             startDate: startTs,
             endDate: endTs
           }),
-          overviewService.getUsers({
+          userService.getUsersInDate({
             startDate: startTs,
             endDate: endTs
           })
@@ -187,8 +189,8 @@ const Overview = () => {
     predayEnd.setDate(predayEnd.getDate()-1);
 
     //2달 사용자 전체 조회
-    const userPromise = overviewService
-      .getUsers({startDate: startDate.getTime(), endDate: nowTimeStamp})
+    const userPromise = userService
+      .getUsersInDate({startDate: startDate.getTime(), endDate: nowTimeStamp})
       .then((data) => {
         setTwoMonthUserList(data);
 
@@ -227,8 +229,8 @@ const Overview = () => {
       .catch((e)=> console.log(e));
 
     //2달 이벤트 전체 조회
-    const eventPromise = overviewService
-      .getEvents({startDate: startDate.getTime(), endDate: nowTimeStamp})
+    const eventPromise = eventService
+      .getEventsInDate({startDate: startDate.getTime(), endDate: nowTimeStamp})
       .then((data) => {
         setTwoMonthEventList(data);
 
