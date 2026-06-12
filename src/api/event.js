@@ -9,4 +9,11 @@ export const eventService = {
         )
         return response.data;
     },
+    //페이지 내로 데이터 조회
+    getLoadEvent : async({page, size, sort}) => {
+        const response = await axiosInstance.get(
+            API_ENDPOINTS.EVENT.PAGE({page, size, sort})
+        )
+        return response.data;
+    }
 }

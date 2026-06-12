@@ -37,6 +37,7 @@ export const API_ENDPOINTS = {
   EVENT: {
     RANGE: ({ startDate, endDate })       => `/event?create_at:gt=${startDate}&create_at:lt=${endDate}`,
     TYPE: ({ startDate, endDate, type })  => `/event?create_at:gt=${startDate}&create_at:lt=${endDate}&type=${type}`,
+    PAGE: ({ page, size, sort })          => `/event?_sort=-${sort}&_page=${page}&_per_page=${size}`
   },
 
   USER: {

@@ -136,7 +136,7 @@ export const lightTheme = {
     orange: '#F8C470',
     card: '#FFFFFF', // Card / Sidebar
     inputBg: '#F9FAFB', // Input BG
-    hover: '#F3F4F6', // Hover / Grid Line
+    hover: '#daedff', // Hover / Grid Line
     activeNav: '#185fa5', // Active Nav / Check
     
 
@@ -203,7 +203,7 @@ export const darkTheme = {
     card: '#161B22', // Sidebar / Card
     cardSurface: '#1C2333', // Card Surface
     inputBg: '#21262D', // Input / Hover
-    hover: '#21262D',
+    hover: '#152f55',
     activeNav: '#e6f1fb', // Active Nav BG
     inputFocus: '#395fb6',
     border: '#30363D',
