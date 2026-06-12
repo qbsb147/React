@@ -28,6 +28,6 @@ export const userService = {
         const response = await axiosInstance.get(
             API_ENDPOINTS.USER.GET(user_no)
         )
-        return response.data;
+        return response.data[0];
     }
 }
