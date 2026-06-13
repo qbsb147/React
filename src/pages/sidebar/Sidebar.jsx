@@ -66,11 +66,11 @@ const Sidebar = ({ onToggleTheme, isDark }) => {
   const eventChk = (
     <Box sx={{ display: 'flex', flexDirection: 'row'}}>
       <FormControlLabel
-        label="노출"
+        label="조회"
         control={<Checkbox checked={events.view} onChange={() => checkHandle({key: 'view', checked : events, setChecked : setEvents})} />}
       />
       <FormControlLabel
-        label="조회"
+        label="방문"
         control={<Checkbox checked={events.click} onChange={() => checkHandle({key: 'click', checked : events, setChecked : setEvents})} />}
       />
       <FormControlLabel

@@ -281,14 +281,14 @@ const User = () => {
                       '&:hover': {
                         backgroundColor: 'action.hover',
                       },
-                    }}>노출</TableCell>
+                    }}>조회</TableCell>
             <TableCell align="right" onClick={() => changeTop10FromEvent('click')} sx={{
                       cursor: 'pointer',
                       backgroundColor: topType==='click'&&'secondary.main',
                       '&:hover': {
                         backgroundColor: 'action.hover',
                       },
-                    }}>조회</TableCell>
+                    }}>방문</TableCell>
             <TableCell align="right" onClick={() => changeTop10FromEvent('purchase')} sx={{
                       cursor: 'pointer',
                       backgroundColor: topType==='purchase'&&'secondary.main',

@@ -169,7 +169,7 @@ const Overview = () => {
   useEffect(() => {
 
     setLoading(true);
-    //2달 이벤트 전체 조회
+    //2달 이벤트 전체 방문
     const start = new Date();
     start.setMonth(start.getMonth()-2);
     const startDate = start;
@@ -190,7 +190,7 @@ const Overview = () => {
     const predayEnd = new Date();
     predayEnd.setDate(predayEnd.getDate()-1);
 
-    //2달 사용자 전체 조회
+    //2달 사용자 전체 방문
     const userPromise = userService
       .getUsersInDate({startDate: startDate.getTime(), endDate: nowTimeStamp})
       .then((data) => {
@@ -230,7 +230,7 @@ const Overview = () => {
       })
       .catch((e)=> console.log(e));
 
-    //2달 이벤트 전체 조회
+    //2달 이벤트 전체 방문
     const eventPromise = eventService
       .getEventsInDate({startDate: startDate.getTime(), endDate: nowTimeStamp})
       .then((data) => {
