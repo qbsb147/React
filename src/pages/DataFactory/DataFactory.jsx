@@ -3,6 +3,8 @@ import {dataService} from '../../api/data'
 import { toast } from 'react-toastify';
 import { alpha, KoAddress, TLD, content, thumbnail, type } from './data.js';
 const DataFactory = () => {
+  const now = Date.now();
+  const oneWeekAgo = now - 30 * 24 * 60 * 60 * 1000;
   function randomNum(min, max) {
     return Math.floor(Math.random()*(max - min + 1)) + min;
   }
@@ -23,7 +25,7 @@ const DataFactory = () => {
                         TLD[randomNum(0,TLD.length-1)],
           address     : KoAddress[randomNum(0,KoAddress.length-1)],
           access_time : Date.now(),
-          create_at   : Date.now(),
+          create_at   : Math.floor(Math.random() * (now - oneWeekAgo) + oneWeekAgo),
           update_at   : Date.now(),
         };
         await dataService.generateDummyUser(user)
@@ -47,7 +49,7 @@ const DataFactory = () => {
           title       : content[contentNo].title,
           thumbnail   : thumbnail[randomNum(0,thumbnail.length-1)],
           description : content[contentNo].description,
-          create_at   : Date.now(),
+          create_at   : Math.floor(Math.random() * (now - oneWeekAgo) + oneWeekAgo),
           update_at   : Date.now(),
         };
         console.log(board)
@@ -59,20 +61,31 @@ const DataFactory = () => {
     }
   }
   async function generateDummyEvent() {
-    console.log("렌더링됨")
     try {
       const EventLastIdx = await dataService.getEventLastIndex();
       const userIdxList  = await dataService.getUserIndexList();
       const boardIdxList = await dataService.getBoardIndexList();
       for (let i = EventLastIdx; i < EventLastIdx+50; i++) {
-        const event = {
+        let event = {
           event_no    : i,
           user_no     : userIdxList [randomNum(0, userIdxList.length-1)],
           board_no    : boardIdxList[randomNum(0, boardIdxList.length-1)],
-          type        : type        [randomNum(0, type.length-1)],
-          create_at   : Date.now(),
         };
-        await dataService.generateDummyEvent(event);
+        for (let v = 0; v < 8; v++) {
+          event.type       = 'view';
+          event.create_at  = Math.floor(Math.random() * (now - oneWeekAgo) + oneWeekAgo);
+          await dataService.generateDummyEvent({ ...event });
+        }
+        for (let v = 0; v < 4; v++) {
+          event.type       = 'click';
+          event.create_at  = Math.floor(Math.random() * (now - oneWeekAgo) + oneWeekAgo);
+          await dataService.generateDummyEvent({ ...event });
+        }
+        for (let v = 0; v < 2; v++) {
+          event.type       = 'purchase';
+          event.create_at  = Math.floor(Math.random() * (now - oneWeekAgo) + oneWeekAgo);
+          await dataService.generateDummyEvent({ ...event });
+        }
       }
       toast.info("이벤트 더미데이터 생성 성공")
     } catch (e){

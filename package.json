@@ -14,9 +14,12 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@fontsource/roboto": "^5.2.10",
     "@hookform/resolvers": "^5.0.1",
-    "@mui/material": "^9.0.1",
+    "@mui/material": "^9.1.1",
+    "@mui/x-data-grid": "^9.5.0",
     "@mui/x-date-pickers": "^9.3.0",
+    "@recharts/devtools": "^0.0.14",
     "@tabler/icons-react": "^3.44.0",
     "aos": "^2.3.4",
     "aox": "^0.0.1",
@@ -45,7 +48,7 @@
     "@eslint/js": "^9.22.0",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
-    "@vitejs/plugin-react": "^4.3.4",
+    "@vitejs/plugin-react": "^6.0.2",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-prettier": "^5.4.0",
@@ -55,6 +58,6 @@
     "globals": "^16.0.0",
     "json-server": "^1.0.0-beta.3",
     "prettier": "^3.5.3",
-    "vite": "^6.3.1"
+    "vite": "^8.0.16"
   }
 }
