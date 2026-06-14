@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { userService } from '../../api/user';
 import { useFilterStore } from '../../store/filterStore'
-import { userAccessFilter, userDateFilter, userFilter, userTypeFilter } from '../../utils/filter'
+import { userAccessFilter,userFilter} from '../../utils/filter'
 import { eventService } from '../../api/event';
 import KPI from '../../components/KPI';
 import AreaChartGraph from '../../components/AreaChart';
@@ -14,6 +14,8 @@ import TableBody from '@mui/material/TableBody';
 import Paper from '@mui/material/Paper';
 import { getWeekRange } from '../../utils/date';
 import Box from '@mui/material/Box';
+import dayjs from 'dayjs';
+import { dayOfWeek } from '../DataFactory/data';
 
 const User = () => {
   const { startTime, endTime, users } = useFilterStore()
@@ -21,22 +23,15 @@ const User = () => {
   const startTs = startTime.valueOf();
   const endTs = endTime.valueOf();
   
-  const [allUser, setAllUser] = useState([]);
+  const [userCnt, setUserCnt] = useState(0);
+  const [monthUser, setMonthUser] = useState([]);
   const [visitTable, setVisitTable] = useState([]);
   const [top10, setTop10] = useState([]);
   const [topType, setTopType] = useState([]);
   const [userChart, setUserChart] = useState([]);
   const [userListInDate, setUserListInDate] = useState([]);
-  const [eventInDate, setEventInDate] = useState([]);
   const [maxLength, setMaxLength] = useState(0);
   const userEventMap = useRef(new Map());
-
-  const {newUserInDate, existingUserInDate} = useMemo(() => {
-    return{
-      newUserInDate       : userTypeFilter({data: userListInDate, type:'newUser'}),
-      existingUserInDate  : userTypeFilter({data: userListInDate, type:'existingUser'}),
-    };
-  },[userListInDate])
 
   const getRevisitRate = ({preWeekUser, curWeekUser}) => {
     const preUserSet = new Set(preWeekUser.map((user) => user.user_no));
@@ -59,22 +54,26 @@ const User = () => {
     const day = now.getDay() || 7;
     const last = new Date();
     last.setDate(now.getDate() - day);
-    const start = new Date(last);
-    start.setHours(0,0,0,0);
-    const end = new Date(last);
-    end.setHours(23,59,59,999);
-    const newUserAll = userTypeFilter({data: allUser, type: 'newUser'});
-    const existingUserAll = userTypeFilter({data: allUser, type: 'existingUser'});
-
-    const preStart = new Date(last)
-    preStart.setHours(0,0,0,0);
-    const preEnd = new Date(last)
-    preEnd.setHours(23,59,59,999);
+    
     for (let i = 0; i < 4; i++) {
+      const start = new Date(last);
+      const end = new Date(last);
+      const preStart = new Date(last)
+      const preEnd = new Date(last)
+      
+      start.setHours(0,0,0,0);
+      end.setHours(23,59,59,999);
+      preStart.setHours(0,0,0,0);
+      preEnd.setHours(23,59,59,999);
+
       start.setDate(last.getDate() - 7*(i+1) + 1);
       end.setDate(last.getDate() - 7*i);
       preStart.setDate(last.getDate() - 7*(i+2) + 1);
       preEnd.setDate(last.getDate() - 7*(i+1));
+      
+      const newUserAll = monthUser.filter((user)=> (user.create_at > start && user.create_at <= end));
+      const existingUserAll = monthUser.filter((user)=> (user.create_at <= start));
+
       const newUsers = userAccessFilter({
         data: newUserAll,
         startDate: start.getTime(), 
@@ -113,6 +112,7 @@ const User = () => {
   }
 
   const changeTop10FromEvent = async (type) => {
+    setTopType(type);
     const entries = Array.from(userEventMap.current);
     let sorted = [];
     if(type === 'all') {
@@ -132,13 +132,12 @@ const User = () => {
                         return b[1].purchase - a[1].purchase
                       })
     }
-    setTopType(type);
-    let max = 1;
+    const topEntries = sorted.slice(0,10);
 
     const enriched = await Promise.all(
-      sorted.map(async ([key, value]) => {
+      topEntries.map(async ([key, value]) => {
         const user = await getUserInfo(key);
-        const filtered = userFilter({ data: user, users });
+        const filtered = userFilter({ data: [user], users });
 
         if (!filtered.length) return null;
 
@@ -148,20 +147,23 @@ const User = () => {
         };
       })
     );
+
+    let max = 1;
+
     const listTop10 = enriched
       .filter(Boolean)
       .slice(0, 10)
       .map(({ user, value }) => {
         const val =
-          (type==='view'    && value.view) ||
-          (type==='click'   && value.click) ||
+          (type==='view'    && value.view)     ||
+          (type==='click'   && value.click)    ||
           (type==='purchase'&& value.purchase) ||
           (type==='all'     && value.event);
 
         if (val > max) max = val;
 
         return {
-          type: (user.create_at >= preWeek && user.create_at <= now ? '신규 회원' : '기존 회원'),
+          type: (user.create_at > preWeek && user.create_at <= now ? '신규 회원' : '기존 회원'),
           user_id: user.user_id,
           view: value.view,
           click: value.click,
@@ -172,25 +174,78 @@ const User = () => {
       });
     setMaxLength(max);
     setTop10(listTop10);
-    console.log(top10);
   }
 
   //필터 적용시
   useEffect(()=>{
     userEventMap.current = new Map();
+    const map = new Map();
     setTop10([]);
-    setUserListInDate(userDateFilter({data: allUser, startDate : startTs, endDate : endTs}));
+    userService.getUsersInDate({startDate: startTs, endDate: endTs})
+      .then((data) => {
+        setUserListInDate(data);
+        data.forEach(item => {
+          const creatAt  = new Date(item.create_at);
+          const preDate  = new Date(item.create_at);
+          const start    = preDate.setDate(preDate.getDate() - 7);
+          const end      = creatAt.getTime();
+          const tdate    = new Date(item.access_time).getTime();
+          
+          const date     = new Date(item.access_time);
+          const lastDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+          let time = '';
+          let sortKey = 0;
+          const gap = endTs - startTs;
+
+          if(     gap >  (365 * 7 * 24 * 60 * 60 * 1000)){
+            time    = date.getFullYear()     + '년';
+            sortKey = new Date(date.getFullYear(), 0, 1).getTime();
+          }
+          else if(gap >  (lastDate.getDate() * 7 * 24 * 60 * 60 * 1000)) {
+            time    = (date.getMonth() + 1)  + '월';
+            sortKey = new Date(date.getFullYear(), date.getMonth(), 1).getTime();
+          }
+          else if(gap >  (7 * 24 * 60 * 60 * 1000)){
+            const bucket = Math.floor(date.getDate()/5);
+            time    = bucket*5 + ' ~ ' + Math.min((bucket+1)*5, lastDate.getDate()) + '일';
+            sortKey = new Date(date.getFullYear(), date.getMonth(), bucket * 5).getTime();
+          }
+          else if(gap >  (24 * 60 * 60 * 1000)){
+            time    = dayOfWeek[date.getDay()];
+            sortKey = new Date(date.setDate(date.getDate() - date.getDay())).getTime();
+          }
+          else {
+            time    = date.getHours()        + '시';
+            sortKey = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours()).getTime();
+          }
+          
+          if(!map.has(sortKey))
+            map.set(sortKey, 
+              {time: time, sortKey, newUser: 0, existingUser: 0}
+            )
+
+          const prev = map.get(sortKey);
+
+          map.set(sortKey,{
+            time          : time,
+            newUser       : prev.newUser      + (tdate >   start && tdate <= end),
+            existingUser  : prev.existingUser + (tdate <=  start),
+            sortKey       : prev.sortKey,
+          })
+        })
+        setUserChart(Array.from(map.values()).sort((a,b) => a.sortKey - b.sortKey));
+      })
+      .catch(console.log);
     eventService.getEventsInDate({startDate: startTs, endDate: endTs})
       .then((data)=> {
-        setEventInDate(data)
-        
         data.forEach(item => {
           if(!userEventMap.current.has(item.user_no)) 
             userEventMap.current.set(item.user_no, 
               {view: 0, click: 0, purchase: 0, event: 0}
             )
-          
-          const prev = userEventMap.current.get(item.user_no);
+
+            const prev = userEventMap.current.get(item.user_no);
 
           userEventMap.current.set(item.user_no, {
             view:     prev.view       + (item.type==='view'), 
@@ -202,11 +257,11 @@ const User = () => {
         changeTop10FromEvent('all')
       })
       .catch(console.log)
-  },[startTime, endTime, allUser, users])
+  },[startTs, endTs, users])
 
   useEffect(()=>{
     setVisitTable(getVisitTable());
-  },[allUser])
+  },[monthUser])
 
   //초기 실행
   useEffect(()=> {
@@ -222,26 +277,33 @@ const User = () => {
     start.setHours(0,0,0,0);
 
     userService
-    .getAllUsers()
-    .then((data)=> {
-      setAllUser(data);
-    })
-    .catch((e)=> console.log(e));
+      .getUserCnt()
+      .then((data)=> {
+        setUserCnt(data);
+      })
+      .catch(console.log);
+
+    userService
+      .getUsersInDate({startDate: start.getTime(), endDate: end.getTime()})
+      .then((data)=>{
+        setMonthUser(data);
+      })
+      .catch(console.log)
   },[])
 
   return (
   <div>
     <KPI
       title={'총 사용자 수'}
-      value={allUser.length}
+      value={userCnt}
     />
     <KPI
       title={'기간 내 사용자 수'}
       value={userListInDate.length}
     />
     <AreaChartGraph
+      data={userChart}
     />
-
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
         <TableHead>
@@ -263,7 +325,7 @@ const User = () => {
               </TableCell>
               <TableCell align="right">{row.newUser}</TableCell>
               <TableCell align="right">{row.existingUser}</TableCell>
-              <TableCell align="right">{row.revisitRate}</TableCell>
+              <TableCell align="right">{row.revisitRate.toFixed(1)}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -273,7 +335,7 @@ const User = () => {
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
-            <TableCell>사용자 아이디</TableCell>
+            <TableCell sx={{width : 100}}>사용자 아이디</TableCell>
             <TableCell align="right">회원 유형</TableCell>
             <TableCell align="right" onClick={() => changeTop10FromEvent('view')} sx={{
                       cursor: 'pointer',
@@ -303,7 +365,7 @@ const User = () => {
                         backgroundColor: 'action.hover',
                       },
                     }}>총 이벤트량</TableCell>
-            <TableCell align="right">Bar</TableCell>
+            <TableCell align="right" sx={{minWidth : 200}}>Bar</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

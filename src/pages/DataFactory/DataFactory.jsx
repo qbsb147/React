@@ -1,10 +1,10 @@
 import React from 'react'
 import {dataService} from '../../api/data'
 import { toast } from 'react-toastify';
-import { alpha, KoAddress, TLD, content, thumbnail, type } from './data.js';
+import { alpha, KoAddress, TLD, content, thumbnail } from './data.js';
 const DataFactory = () => {
   const now = Date.now();
-  const oneWeekAgo = now - 30 * 24 * 60 * 60 * 1000;
+  const oneMonthAgo = now - 30 * 24 * 60 * 60 * 1000;
   function randomNum(min, max) {
     return Math.floor(Math.random()*(max - min + 1)) + min;
   }
@@ -12,9 +12,10 @@ const DataFactory = () => {
     try {
       const lastIdx = await dataService.getUserLastIndex();
       for (let i = lastIdx; i < lastIdx+30; i++) {
+        const timeAt = Math.floor(Math.random() * (now - oneMonthAgo) + oneMonthAgo);
         const user = {
           user_no     : i,
-          user_id     : Array.from({length:8} , () => alpha[randomNum(0,alpha.length-1)]).join('')  + i ,
+          user_id     : Array.from({length:8} , () => alpha[randomNum(0,alpha.length-1)]).join('') + i ,
           user_pwd    : Array.from({length:10}, () => alpha[randomNum(0,alpha.length-1)]).join('') + i ,
           user_name   : Array.from({length:10}, () => alpha[randomNum(0,alpha.length-1)]).join(''),
           nick_name   : Array.from({length:15}, () => alpha[randomNum(0,alpha.length-1)]).join(''),
@@ -24,9 +25,9 @@ const DataFactory = () => {
                         '.' +
                         TLD[randomNum(0,TLD.length-1)],
           address     : KoAddress[randomNum(0,KoAddress.length-1)],
-          access_time : Date.now(),
-          create_at   : Math.floor(Math.random() * (now - oneWeekAgo) + oneWeekAgo),
-          update_at   : Date.now(),
+          access_time   : Math.floor(Math.random() * (now - timeAt) + timeAt),
+          create_at   : timeAt,
+          update_at   : Math.floor(Math.random() * (now - timeAt) + timeAt),
         };
         await dataService.generateDummyUser(user)
       }
@@ -38,10 +39,10 @@ const DataFactory = () => {
 
   async function generateDummyBoard() {
     try {
-      const boardLastIdx = await dataService.getBoardLastIndex();
-      const userIdxList = await dataService.getUserIndexList();
+      const boardLastIdx  = await dataService.getBoardLastIndex();
+      const userIdxList   = await dataService.getUserIndexList();
       for (let i = boardLastIdx; i < boardLastIdx+30; i++) {
-        const contentNo = randomNum(0,content.length-1);
+        const contentNo   = randomNum(0,content.length-1);
 
         const board = {
           board_no    : i,
@@ -49,10 +50,9 @@ const DataFactory = () => {
           title       : content[contentNo].title,
           thumbnail   : thumbnail[randomNum(0,thumbnail.length-1)],
           description : content[contentNo].description,
-          create_at   : Math.floor(Math.random() * (now - oneWeekAgo) + oneWeekAgo),
+          create_at   : Math.floor(Math.random() * (now - oneMonthAgo) + oneMonthAgo),
           update_at   : Date.now(),
         };
-        console.log(board)
         await dataService.generateDummyBoard(board);
       }
       toast.info("게시글 더미데이터 생성 성공")
@@ -66,24 +66,25 @@ const DataFactory = () => {
       const userIdxList  = await dataService.getUserIndexList();
       const boardIdxList = await dataService.getBoardIndexList();
       for (let i = EventLastIdx; i < EventLastIdx+50; i++) {
+        const createAt = Math.floor(Math.random() * (now - oneMonthAgo) + oneMonthAgo);
         let event = {
           event_no    : i,
-          user_no     : userIdxList [randomNum(0, userIdxList.length-1)],
           board_no    : boardIdxList[randomNum(0, boardIdxList.length-1)],
+          create_at   : createAt,
         };
         for (let v = 0; v < 8; v++) {
           event.type       = 'view';
-          event.create_at  = Math.floor(Math.random() * (now - oneWeekAgo) + oneWeekAgo);
+          event.user_no    = userIdxList [randomNum(0, userIdxList.length-1)];
           await dataService.generateDummyEvent({ ...event });
         }
         for (let v = 0; v < 4; v++) {
           event.type       = 'click';
-          event.create_at  = Math.floor(Math.random() * (now - oneWeekAgo) + oneWeekAgo);
+          event.user_no    = userIdxList [randomNum(0, userIdxList.length-1)];
           await dataService.generateDummyEvent({ ...event });
         }
         for (let v = 0; v < 2; v++) {
           event.type       = 'purchase';
-          event.create_at  = Math.floor(Math.random() * (now - oneWeekAgo) + oneWeekAgo);
+          event.user_no    = userIdxList [randomNum(0, userIdxList.length-1)];
           await dataService.generateDummyEvent({ ...event });
         }
       }

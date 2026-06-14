@@ -3,6 +3,7 @@ export const alpha = ['a','b','c','d','e','f','g','h','i','j','k','l','m',
 export const KoAddress = ['서울특별시', '경기도', '강원도', '제주도', '충청도', '전라도'];
 export const TLD = ['com', 'net', 'co.kr', 'org'];
 export const type = ['view','click','purchase'];
+export const dayOfWeek = ["일요일","월요일","화요일","수요일","목요일","금요일","토요일"];
 export const content = [
       {
         title: '2026 봄 신상 오버핏 셔츠 컬렉션',

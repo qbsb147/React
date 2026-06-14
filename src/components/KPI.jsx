@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { IconArrowUp } from '@tabler/icons-react';
+import { IconArrowUp, IconArrowDown } from '@tabler/icons-react';
 
 export const KPI = ({ title, value, content, diff, color = 'default' }) => {
   const status = diff<0 ? 'down' : 'up';
@@ -14,10 +14,14 @@ export const KPI = ({ title, value, content, diff, color = 'default' }) => {
       <Value>{formatNumber(value)}</Value>
       {content && 
         <Delta style={{ color: status === 'up' ? '#3FB950' : '#F85149' }}>
+          {status === 'up' ?
           <IconArrowUp size={16} />
+          : 
+          <IconArrowDown size={16}/>
+          }
           <TextGroup style={{ gap: '1px' }}>
             <Content status={status}>{content}</Content>
-            <Diff status={status}>{diff}</Diff>
+            <Diff status={status}>{diff.toFixed(1)}</Diff>
           </TextGroup>
         </Delta>
       }

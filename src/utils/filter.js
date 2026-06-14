@@ -21,7 +21,7 @@ export const userTypeFilter = ({data, type}) => {
     const {now, preWeek} = getWeekRange();
     return data.filter((entry) => (
         (type === 'newUser'      && entry.create_at >= preWeek && entry.create_at<=now) ||
-        (type === 'existingUser' && entry.create_at < preWeek)
+        (type === 'existingUser' && entry.create_at <  preWeek)
     ))
 };
 
