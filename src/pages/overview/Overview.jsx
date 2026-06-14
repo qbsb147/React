@@ -58,7 +58,7 @@ const Overview = () => {
   }
 
   const calcRate = (now, prev) => {
-    if (!prev) return 0;
+    if (!prev) return now;
     const rate = ((now-prev)/prev)*100;
     return Number.isFinite(rate) ? rate : 0;
   }
@@ -70,16 +70,15 @@ const Overview = () => {
   }
 
   const pieData = useMemo(()=>{
-    const filteredNewUser = userDateFilter({data: twoMonthUserList, startDate: startTs, endDate: endTs})
-    const filteredExistingUser = userDateFilter({data: twoMonthUserList, startDate: startTs, endDate: endTs})
-    const newUser = userTypeFilter({data: filteredNewUser, type: 'newUser'});
-    const existingUser = userTypeFilter({data: filteredExistingUser, type: 'existingUser'});
+    const filteredUser = userDateFilter({data: twoMonthUserList, startDate: startTs, endDate: endTs})
+    const newUser = userTypeFilter({data: filteredUser, type: 'newUser'});
+    const existingUser = userTypeFilter({data: filteredUser, type: 'existingUser'});
 
     return [
       {name: '신규 사용자', value: newUser.length},
-      {name: '기존 사용자', value: 100},
+      {name: '기존 사용자', value: existingUser.length},
     ]
-  },[twoMonthUserList])
+  },[twoMonthUserList, startTs, endTs])
 
   const purchaseRate = useMemo(() => {
     const nowStart  = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -88,14 +87,17 @@ const Overview = () => {
     prevEnd.setMonth(prevEnd.getMonth() - 1);
 
     const filteredNow = eventDateFilter({data: twoMonthEventList, startDate : nowStart.getTime(), endDate : nowTimeStamp});
-    const nowList = userTypeFilter({data: filteredNow, type: "purchase"});
-    const filteredPre = eventDateFilter({data: twoMonthEventList, startDate : prevStart.getTime(), endDate : prevEnd});
-    const prevList = userTypeFilter({data: filteredPre, type: "purchase"});
+    const nowList = eventTypeFilter({data: filteredNow, type: "purchase"});
+    const filteredPre = eventDateFilter({data: twoMonthEventList, startDate : prevStart.getTime(), endDate : prevEnd.getTime()});
+    const prevList = eventTypeFilter({data: filteredPre, type: "purchase"});
 
     const nowCnt  = nowList.length
     const prevCnt = prevList.length
 
-    return prevCnt === 0 ? 0 : ((nowCnt - prevCnt) / prevCnt) * 100;
+    console.log("nowList",nowList)
+    console.log("prevList",prevList)
+
+    return prevCnt === 0 ? nowCnt : ((nowCnt - prevCnt) / prevCnt) * 100;
   },[twoMonthEventList])
 
   const fetchTop5 = async () => {
@@ -176,7 +178,12 @@ const Overview = () => {
     const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
     const thisMonthEnd = new Date();
     const lastMonthStart = new Date(now.getFullYear(), now.getMonth()-1, 1);
-    const lastMonthEnd = new Date(now.getMonth()-1);
+    const lastMonthEnd = new Date();
+    const day = lastMonthEnd.getDate();
+    lastMonthEnd.setMonth(now.getMonth()-1);
+    if(lastMonthEnd.getDate() !== day){
+      lastMonthEnd.setDate(0);
+    }
 
     const todayStart = new Date();
     todayStart.setHours(0,0,0,0);
@@ -203,6 +210,12 @@ const Overview = () => {
             endDate: thisMonthEnd.getTime(),
           })
         );
+        const res = userAccessFilter({
+            data: data,
+            startDate: lastMonthStart.getTime(),
+            endDate: lastMonthEnd.getTime(),
+          })
+        console.log("res",res)
 
         setUserLastMonthVisited(
           userAccessFilter({

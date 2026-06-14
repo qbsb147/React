@@ -41,7 +41,7 @@ export const API_ENDPOINTS = {
   },
 
   USER: {
-    ALL : () => `/user`,
+    COUNT : () => `/user?_page=0`,
     ACCESS: ({ startDate, endDate })      => `/user?access_time:gt=${startDate}&access_time:lt=${endDate}`,
     GET : (user_no)                       => `/user?user_no:eq=${user_no}`
   },

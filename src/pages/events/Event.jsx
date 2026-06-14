@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { eventService } from '../../api/event';
 import { useFilterStore } from '../../store/filterStore';
 import { eventTypeFilter, userFilter } from '../../utils/filter';
@@ -34,6 +34,7 @@ const Event = () => {
   const [viewInFilter, setViewInFilter] = useState([]);
   const [clickInFilter, setClickInFilter] = useState([]);
   const [purchaseInFilter, setPurchaseInFilter] = useState([]);
+  const [eventTimes, setEventTimes] = useState([]);
 
   const handleChangePage = (e, value) => {
     setPage(value);
@@ -63,10 +64,11 @@ const Event = () => {
                 const boardName = await getBoardName(entry.board_no);
                 const date = new Date(entry.create_at);
                 return({
-                  create_at : date.toLocaleString(),
-                  user_id : userId,
-                  event_type : entry.type,
-                  board_name : boardName,
+                  id          : entry.id,
+                  create_at   : date.toLocaleString(),
+                  user_id     : userId,
+                  event_type  : entry.type,
+                  board_name  : boardName,
                 })
           }))
       }
@@ -83,6 +85,12 @@ const Event = () => {
 
   //날짜 및 사용자 조건 변경 시 진행
   useEffect(()=> {
+    eventService
+      .getEventsInDate({startDate: startTs, endDate: endTs})
+      .then((data)=> {
+        setEventInDate(data);
+      })
+      .catch(console.log)
     const filteredEvent = userFilter({data: eventInDate, users});
     setEventInFilter(filteredEvent);
     setViewInFilter(eventTypeFilter({data: filteredEvent, type: 'view'}));
@@ -101,7 +109,7 @@ const Event = () => {
         setEventPage(rest);
       })
       .catch(console.log)
-  },[page])
+  },[page, rowsPerPage])
 
   //초기 렌더링 시 실행
   useEffect(()=> {
@@ -111,40 +119,66 @@ const Event = () => {
         setEventInDate(data);
       })
       .catch(console.log)
+    const startDay = new Date();
+    startDay.setHours(0,0,0,0);
+    const endDay = new Date();
+    endDay.setHours(23,59,59,999);
+    eventService
+      .getEventsInDate({startDate:startDay.getTime(), endDate:endDay.getTime()})
+      .then((data)=> {
+        const map = new Map();
+        for (let hour = 0; hour < 24; hour++) {
+          map.set(hour, {
+            hour,
+            view      : 0,
+            click     : 0,
+            purchase  : 0,
+          });
+        }
+        data.forEach((item)=>{
+          const hour = new Date(item.create_at).getHours();
+          const entry = map.get(hour);
+          entry[item.type] += 1;
+        })
+        setEventTimes(Array.from(map.values()).sort((a,b) => a.hour - b.hour));
+      })
+      .catch(console.log)
   },[])
 
   const columns = [
-    { field: 'create_at', headerName: '타임스탬프', minWidth : 200 },
-    { field: 'user_id', headerName: '사용자ID', minWidth : 150 },
-    { field: 'event_type', headerName: '이벤트', minWidth : 100 },
-    { field: 'board_name', headerName: '상품', flex : 1},
+    { field: 'create_at',   headerName: '타임스탬프', minWidth : 200 },
+    { field: 'user_id',     headerName: '사용자ID',  minWidth : 150 },
+    { field: 'event_type',  headerName: '이벤트',    minWidth : 100 },
+    { field: 'board_name',  headerName: '상품',      flex : 1},
   ]
   return (
     <div>
       <Title>
-        시간별 이벤트 발생량
+        하루 시간별 이벤트 발생량
       </Title>
-      <BarChart
-        style={{ width: '100%', maxWidth: '700px', maxHeight: '70vh', aspectRatio: 1.618 }}
-        responsive
-        // data={data}
-        margin={{
-          top: 20,
-          right: 0,
-          left: 0,
-          bottom: 5,
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" niceTicks="snap125" />
-        <YAxis width="auto" niceTicks="snap125" />
-        <Tooltip />
-        <Legend />
-        <Bar dataKey="view" stackId="a" fill="#185FA5" background />
-        <Bar dataKey="click" stackId="a" fill="#97C459" background />
-        <Bar dataKey="purchase" stackId="a" fill="#EF9F27" background />
-        <RechartsDevtools />
-      </BarChart>
+      {eventTimes &&
+        <BarChart
+          style={{ width: '100%', maxWidth: '700px', maxHeight: '70vh', aspectRatio: 1.618 }}
+          responsive
+          data={eventTimes}
+          margin={{
+            top: 20,
+            right: 0,
+            left: 0,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="hour" niceTicks="snap125" />
+          <YAxis width="auto" niceTicks="snap125" />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="view"     stackId="a" fill="#185FA5" background />
+          <Bar dataKey="click"    stackId="a" fill="#97C459" background />
+          <Bar dataKey="purchase" stackId="a" fill="#EF9F27" background />
+          <RechartsDevtools />
+        </BarChart>
+      }
       <EventType>
         <Title>이벤트 타입 분포</Title>
         <TypeBox>
@@ -204,9 +238,9 @@ const Event = () => {
           rows={eventPage.data ?? []}
           loading={logLoading}
           columns={columns}
-          getRowId={(row)=> row.user_id}
+          getRowId={(row)=> row.id}
           disableRowSelectionOnClick
-          rowCount={eventPage.items}
+          rowCount={eventPage.items ?? 0}
           paginationMode="server"
           pageSizeOptions={[10, 20, 50]}
           paginationModel={{
