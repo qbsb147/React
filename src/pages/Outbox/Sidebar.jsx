@@ -97,7 +97,7 @@ const Sidebar = ({ onToggleTheme, isDark }) => {
     <Container>
       <Top>
         <Logo src={barChartImg} alt="Logo"></Logo>
-        <Title>쇼핑몰 분석</Title>
+        <div className='title'>쇼핑몰 분석</div>
         <Button onClick={()=>onToggleTheme()}>
           {isDark? <MdOutlineDarkMode /> : <CiLight />}
         </Button>

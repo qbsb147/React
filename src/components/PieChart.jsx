@@ -1,4 +1,4 @@
-import { Pie, PieChart, Sector } from 'recharts';
+import { Pie, PieChart, ResponsiveContainer, Sector } from 'recharts';
 import { useTheme } from 'styled-components';
 
 const PieGradient = (props) => {
@@ -46,14 +46,19 @@ export default function PieWithGradient({
   data,
 }) {
   return (
-    <PieChart style={{ width: '100%', maxWidth: '500px', maxHeight: '80vh', aspectRatio: 1 }} responsive>
-      <Pie 
-        data={data} 
-        dataKey="value" 
-        isAnimationActive={isAnimationActive} 
-        shape={PieGradient} 
-        innerRadius="20%" 
-        />
-    </PieChart>
+    <ResponsiveContainer width="100%" height={300}>
+      <PieChart margin={{ top: 20, right: 100, left: 100, bottom: 20 }}>
+        <Pie 
+          data={data} 
+          dataKey="value" 
+          isAnimationActive={isAnimationActive} 
+          shape={PieGradient} 
+          innerRadius="20%" 
+          label={({ name, percent }) =>
+            `${name} ${(percent * 100).toFixed(0)}%`
+          }
+          />
+      </PieChart>
+    </ResponsiveContainer>
   );
 }
