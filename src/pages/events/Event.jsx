@@ -153,119 +153,134 @@ const Event = () => {
   ]
   return (
     <div>
-      <Title>
-        하루 시간별 이벤트 발생량
-      </Title>
-      {eventTimes &&
-        <BarChart
-          style={{ width: '100%', maxWidth: '700px', maxHeight: '70vh', aspectRatio: 1.618 }}
-          responsive
-          data={eventTimes}
-          margin={{
-            top: 20,
-            right: 0,
-            left: 0,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="hour" niceTicks="snap125" />
-          <YAxis width="auto" niceTicks="snap125" />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="view"     stackId="a" fill="#185FA5" background />
-          <Bar dataKey="click"    stackId="a" fill="#97C459" background />
-          <Bar dataKey="purchase" stackId="a" fill="#EF9F27" background />
-          <RechartsDevtools />
-        </BarChart>
-      }
-      <EventType>
-        <Title>이벤트 타입 분포</Title>
-        <TypeBox>
-          <TopRow>
-            <TypeName>조회</TypeName>
-            <Count>{viewInFilter.length.toLocaleString()}</Count>
-          </TopRow>
-          <Gauge>
-            <Box
-              sx={{
-                width: `${(viewInFilter.length / eventInFilter.length) * 100}%`,
-                height: 10,
-                borderRadius: 1,
-                bgcolor: '#185FA5'
-              }}
-            />
-          </Gauge>
-          <Content>전체의 {((viewInFilter.length / eventInFilter.length) * 100).toFixed(1)}%</Content>
-        </TypeBox>
-        <TypeBox>
-          <TopRow>
-            <TypeName>방문</TypeName>
-            <Count>{clickInFilter.length.toLocaleString()}</Count>
-          </TopRow>
-          <Gauge>
-            <Box
-              sx={{
-                width: `${(clickInFilter.length / eventInFilter.length) * 100}%`,
-                height: 10,
-                borderRadius: 1,
-                bgcolor: '#97C459'
-              }}
-            />
-          </Gauge>
-          <Content>전체의 {((clickInFilter.length / eventInFilter.length) * 100).toFixed(1)}%</Content>
-        </TypeBox>
-        <TypeBox>
-          <TopRow>
-            <TypeName>구매</TypeName>
-            <Count>{purchaseInFilter.length.toLocaleString()}</Count>
-          </TopRow>
-          <Gauge>
-            <Box
-              sx={{
-                width: `${(purchaseInFilter.length / eventInFilter.length) * 100}%`,
-                height: 10,
-                borderRadius: 1,
-                bgcolor: '#EF9F27'
-              }}
-            />
-          </Gauge>
-          <Content>전체의 {((purchaseInFilter.length / eventInFilter.length) * 100).toFixed(1)}%</Content>
-        </TypeBox>
-      </EventType>
-      <Box sx={{ height: 400, width: '100%' }}>
-        <DataGrid
-          rows={eventPage.data ?? []}
-          loading={logLoading}
-          columns={columns}
-          getRowId={(row)=> row.id}
-          disableRowSelectionOnClick
-          rowCount={eventPage.items ?? 0}
-          paginationMode="server"
-          pageSizeOptions={[10, 20, 50]}
-          paginationModel={{
-            page: page - 1,
-            pageSize: rowsPerPage
-          }}
-          onPaginationModelChange={(model) => {
-            setPage(model.page + 1);
-            setRowsPerPage(model.pageSize);
-          }}
-        />
-      </Box>
-      <Stack 
-        spacing={2}
-      >
-        <Pagination 
-          count={eventPage.pages}
-          page={page} 
-          shape="rounded" 
-          color="primary"
-          siblingCount={3} 
-          onChange={handleChangePage}
-          sx={{display : 'flex', justifyContent: "center"}}
-        />
-      </Stack>
+      <div className='gap'>
+        <div className='grid-column'>
+          <Card className='card'>
+            <div className='title'>
+              하루 시간별 이벤트 발생량
+            </div>
+            {eventTimes &&
+              <BarChart
+                style={{ width: '100%', maxWidth: '700px', maxHeight: '70vh', aspectRatio: 1.618 }}
+                responsive
+                data={eventTimes}
+                margin={{
+                  top: 20,
+                  right: 0,
+                  left: 0,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="hour" niceTicks="snap125" />
+                <YAxis width="auto" niceTicks="snap125" />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="view"     stackId="a" fill="#185FA5" background />
+                <Bar dataKey="click"    stackId="a" fill="#97C459" background />
+                <Bar dataKey="purchase" stackId="a" fill="#EF9F27" background />
+                <RechartsDevtools />
+              </BarChart>
+            }
+          </Card>
+          <Card className='card'>
+            <EventType>
+              <div className='title'>이벤트 타입 분포</div>
+              <TypeBox>
+                <TopRow>
+                  <TypeName>조회</TypeName>
+                  <Count>{viewInFilter.length.toLocaleString()}</Count>
+                </TopRow>
+                <Gauge>
+                  <Box
+                    sx={{
+                      width: `${(viewInFilter.length / eventInFilter.length) * 100}%`,
+                      height: 10,
+                      borderRadius: 1,
+                      bgcolor: '#185FA5'
+                    }}
+                  />
+                </Gauge>
+                <Content>전체의 {((viewInFilter.length / eventInFilter.length) * 100).toFixed(1)}%</Content>
+              </TypeBox>
+              <TypeBox>
+                <TopRow>
+                  <TypeName>방문</TypeName>
+                  <Count>{clickInFilter.length.toLocaleString()}</Count>
+                </TopRow>
+                <Gauge>
+                  <Box
+                    sx={{
+                      width: `${(clickInFilter.length / eventInFilter.length) * 100}%`,
+                      height: 10,
+                      borderRadius: 1,
+                      bgcolor: '#97C459'
+                    }}
+                  />
+                </Gauge>
+                <Content>전체의 {((clickInFilter.length / eventInFilter.length) * 100).toFixed(1)}%</Content>
+              </TypeBox>
+              <TypeBox>
+                <TopRow>
+                  <TypeName>구매</TypeName>
+                  <Count>{purchaseInFilter.length.toLocaleString()}</Count>
+                </TopRow>
+                <Gauge>
+                  <Box
+                    sx={{
+                      width: `${(purchaseInFilter.length / eventInFilter.length) * 100}%`,
+                      height: 10,
+                      borderRadius: 1,
+                      bgcolor: '#EF9F27'
+                    }}
+                  />
+                </Gauge>
+                <Content>전체의 {((purchaseInFilter.length / eventInFilter.length) * 100).toFixed(1)}%</Content>
+              </TypeBox>
+            </EventType>
+          </Card>
+        </div>
+        <div className='grid-column'>
+          <Card className='card'>
+            <div className='title'>
+              이벤트 로그
+            </div>
+            <Box sx={{ height: 400, width: '100%' }}>
+              <DataGrid
+                rows={eventPage.data ?? []}
+                loading={logLoading}
+                columns={columns}
+                getRowId={(row)=> row.id}
+                disableRowSelectionOnClick
+                rowCount={eventPage.items ?? 0}
+                paginationMode="server"
+                pageSizeOptions={[10, 20, 50]}
+                paginationModel={{
+                  page: page - 1,
+                  pageSize: rowsPerPage
+                }}
+                onPaginationModelChange={(model) => {
+                  setPage(model.page + 1);
+                  setRowsPerPage(model.pageSize);
+                }}
+              />
+            </Box>
+            <Stack 
+              spacing={2}
+            >
+              <Pagination 
+                count={eventPage.pages}
+                page={page} 
+                shape="rounded" 
+                color="primary"
+                siblingCount={3} 
+                onChange={handleChangePage}
+                sx={{display : 'flex', justifyContent: "center"}}
+              />
+            </Stack>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 };
@@ -276,13 +291,6 @@ const EventType = styled.div`
   margin: 10px 0px;
   display: grid;
   gap: 10px;
-`
-
-const Title = styled.div`
-  margin: 10px 0px;
-  display:flex;
-  font-size: ${({ theme }) => theme.fontSizes.xl};
-  font-weight: 600;
 `
 
 const TypeBox = styled.div`
@@ -310,4 +318,8 @@ const Content = styled.div`
   display:flex;
   justify-items: flex-start;
   font-size: ${({ theme }) => theme.fontSizes.sm};;
+`
+const Card = styled.div`
+  background-color: ${({ theme }) => theme.colors.card};
+  border-color: ${({ theme }) => theme.colors.border};
 `

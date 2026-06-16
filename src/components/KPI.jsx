@@ -21,7 +21,7 @@ export const KPI = ({ title, value, content, diff, color = 'default' }) => {
           }
           <TextGroup style={{ gap: '1px' }}>
             <Content status={status}>{content}</Content>
-            <Diff status={status}>{diff.toFixed(1)}</Diff>
+            <Diff status={status}>{diff.toFixed(1)}%</Diff>
           </TextGroup>
         </Delta>
       }

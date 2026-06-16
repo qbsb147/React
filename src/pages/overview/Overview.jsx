@@ -94,9 +94,6 @@ const Overview = () => {
     const nowCnt  = nowList.length
     const prevCnt = prevList.length
 
-    console.log("nowList",nowList)
-    console.log("prevList",prevList)
-
     return prevCnt === 0 ? nowCnt : ((nowCnt - prevCnt) / prevCnt) * 100;
   },[twoMonthEventList])
 
@@ -278,128 +275,156 @@ const Overview = () => {
 
   return (
     <Container>
-      <KPI 
-        title="오늘 방문자 수" 
-        value={userTodayVisited.length} 
-        content="전일 대비" 
-        diff={calcRate(userTodayVisited.length, userPredayVisited.length)} 
-      />
-      <KPI 
-        title="한달 방문자 수" 
-        value={userThisMonthVisited.length} 
-        content="전월 동기" 
-        diff={calcRate(userThisMonthVisited.length, userLastMonthVisited.length)} 
-      />
-      <KPI 
-        title="한달 이벤트 수" 
-        value={eventThisMonthVisited.length} 
-        content="전일 대비" 
-        diff={calcRate(eventThisMonthVisited.length, eventLastMonthVisited.length)} 
-      />
-      <KPI 
-        title="이달 구매 전환율" 
-        value={calcRatio(purchaseEventMonthCnt, clickEventMonthCnt)} 
-        content="전월 동기" 
-        diff={purchaseRate} 
-      />
-      <div style={{ width: "100%", height: 300 }}>
-      <ResponsiveContainer
-        height="100%"
-        width="100%"
-      >
-        <BarChart
-            accessibilityLayer
-            barCategoryGap="10%"
-            barGap={4}
-            data={top5}
-            height={300}
-            width={300}
-            layout='vertical'
-            style={{}}
-            syncMethod="index"
-            throttleDelay="raf"
-            margin={{
-              bottom: 5,
-              left: 20,
-              right: 30,
-              top: 20
-            }}
-            responsive
-        >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis 
-        type="number" 
-        stroke={theme.colors.line}
-        />
-        <YAxis
-          dataKey="board_name"
-          type="category"
-          stroke={theme.colors.line}
-          width={400}
-          tick
-        />
-        <Legend />
-        <Tooltip />
-        <Bar 
-          dataKey="count"
-          fill="#8884d8"
-          stackId="a"
-        />
-        </BarChart>
-      </ResponsiveContainer>
-      </div>
-
-      <div style={{ width: "100%", height: 300 }}>
-      <ResponsiveContainer
-        height={200}
-        width="100%"
-      >
-        <FunnelChart
-          accessibilityLayer
-          data={[
-            {
-              fill: '#E6E6FA',
-              name: 'view',
-              value: funnel.view
-            },
-            {
-              fill: '#C8A2C8',
-              name: 'click',
-              value: funnel.click
-            },
-            {
-              fill: '#8A5FBF',
-              name: 'purchase',
-              value: funnel.purchase
-            }
-          ]}
-        >
-          <Funnel
-            activeShape={{
-              fill: '#6D28D9',
-              stroke: '#38BDF8'
-            }}
-            dataKey="value"
-            isAnimationActive
-            lastShapeType="rectangle"
-            shape={{}}
-            stroke="#424242"
-          >
-            <LabelList
-              dataKey="name"
-              fill= {theme.colors.text.primary}
-              position="right"
-              stroke="none"
+      <div className='gap'>
+        <div className='wrap-center'>
+          <div className='top-line'>
+            <KPI 
+              title="오늘 방문자 수" 
+              value={userTodayVisited.length} 
+              content="전일 대비" 
+              diff={calcRate(userTodayVisited.length, userPredayVisited.length)} 
             />
-          </Funnel>
-          <Tooltip />
-        </FunnelChart>
-      </ResponsiveContainer>
-      </div>
-      <div style={{ width: "100%", height: 300 }}>
-      <PieWithGradient
-        data={pieData}
-      />
+            <KPI 
+              title="한달 방문자 수" 
+              value={userThisMonthVisited.length} 
+              content="전월 동기" 
+              diff={calcRate(userThisMonthVisited.length, userLastMonthVisited.length)} 
+            />
+            <KPI 
+              title="한달 이벤트 수" 
+              value={eventThisMonthVisited.length} 
+              content="전일 대비" 
+              diff={calcRate(eventThisMonthVisited.length, eventLastMonthVisited.length)} 
+            />
+            <KPI 
+              title="이달 구매 전환율" 
+              value={calcRatio(purchaseEventMonthCnt, clickEventMonthCnt)} 
+              content="전월 동기" 
+              diff={purchaseRate} 
+            />
+          </div>
+        </div>
+        <div className='grid-column'>
+          <Card className='card'>
+            <div className='title'>
+              상위 페이지 TOP 5
+            </div>
+            <div style={{ width: "100%", height: 300 }}>
+              <ResponsiveContainer
+                height={300}
+                width="100%"
+              >
+                <BarChart
+                  accessibilityLayer
+                  barCategoryGap="10%"
+                  barGap={4}
+                  data={top5}
+                  height={300}
+                  width={600}
+                  layout='vertical'
+                  style={{}}
+                  syncMethod="index"
+                  throttleDelay="raf"
+                  margin={{
+                    bottom: 5,
+                    left: 20,
+                    right: 30,
+                    top: 20
+                  }}
+                  responsive
+                >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis 
+                type="number" 
+                stroke={theme.colors.line}
+                />
+                <YAxis
+                  dataKey="board_name"
+                  type="category"
+                  stroke={theme.colors.line}
+                  width={200}
+                  tick
+                />
+                <Legend />
+                <Tooltip />
+                <Bar 
+                  dataKey="count"
+                  fill="#8884d8"
+                  stackId="a"
+                />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </Card>
+        </div>
+        <div className='grid-column'>
+          <Card className='card'>
+            <div className='title'>
+              전환 퍼널
+            </div>
+            <div style={{ width: "100%", height: 300 }}>
+              <ResponsiveContainer
+                height={200}
+                width="100%"
+              >
+                <FunnelChart
+                  accessibilityLayer
+                  data={[
+                    {
+                      fill: '#E6E6FA',
+                      name: '조회',
+                      value: funnel.view
+                    },
+                    {
+                      fill: '#C8A2C8',
+                      name: '방문',
+                      value: funnel.click
+                    },
+                    {
+                      fill: '#8A5FBF',
+                      name: '구매',
+                      value: funnel.purchase
+                    }
+                  ]}
+                >
+                  <Funnel
+                    activeShape={{
+                      fill: '#6D28D9',
+                      stroke: '#38BDF8'
+                    }}
+                    dataKey="value"
+                    isAnimationActive
+                    lastShapeType="rectangle"
+                    shape={{}}
+                    stroke="#424242"
+                  >
+                    <LabelList
+                      dataKey="name"
+                      fill= {theme.colors.text.primary}
+                      position="left"
+                      stroke="none"
+                    />
+                    <LabelList
+                      dataKey="value"
+                      fill= {theme.colors.text.primary}
+                      position="center"
+                      stroke="none"
+                    />
+                  </Funnel>
+                  <Tooltip />
+                </FunnelChart>
+              </ResponsiveContainer>
+            </div>
+          </Card>
+          <Card className='card'>
+            <div className='title'>
+              신규 / 재방문 비율
+            </div>
+            <PieWithGradient
+              data={pieData}
+            />
+          </Card>
+        </div>
       </div>
     </Container>
   );
@@ -408,3 +433,8 @@ const Overview = () => {
 export default Overview;
 
 const Container = styled.div``;
+
+const Card = styled.div`
+  background-color: ${({ theme }) => theme.colors.card};
+  border-color: ${({ theme }) => theme.colors.border};
+`

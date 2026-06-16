@@ -16,6 +16,7 @@ import { getWeekRange } from '../../utils/date';
 import Box from '@mui/material/Box';
 import dayjs from 'dayjs';
 import { dayOfWeek } from '../DataFactory/data';
+import styled from 'styled-components';
 
 const User = () => {
   const { startTime, endTime, users } = useFilterStore()
@@ -187,11 +188,16 @@ const User = () => {
         data.forEach(item => {
           const creatAt  = new Date(item.create_at);
           const preDate  = new Date(item.create_at);
-          const start    = preDate.setDate(preDate.getDate() - 7);
-          const end      = creatAt.getTime();
-          const tdate    = new Date(item.access_time).getTime();
-          
+          const preWeek  = preDate.setDate(preDate.getDate() - 7);
+          const createdAt= creatAt.getTime();
+          const accessAt    = new Date(item.access_time).getTime();
           const date     = new Date(item.access_time);
+          
+          const diff = accessAt - createdAt;
+
+          const isNewUser = diff <= (7 * 24 * 60 * 60 * 1000);
+          const isExistingUser = diff > (7 * 24 * 60 * 60 * 1000);
+
           const lastDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
 
           let time = '';
@@ -229,8 +235,8 @@ const User = () => {
 
           map.set(sortKey,{
             time          : time,
-            newUser       : prev.newUser      + (tdate >   start && tdate <= end),
-            existingUser  : prev.existingUser + (tdate <=  start),
+            newUser       : prev.newUser      + isNewUser,
+            existingUser  : prev.existingUser + isExistingUser,
             sortKey       : prev.sortKey,
           })
         })
@@ -293,112 +299,144 @@ const User = () => {
 
   return (
   <div>
-    <KPI
-      title={'총 사용자 수'}
-      value={userCnt}
-    />
-    <KPI
-      title={'기간 내 사용자 수'}
-      value={userListInDate.length}
-    />
-    <AreaChartGraph
-      data={userChart}
-    />
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-        <TableHead>
-          <TableRow>
-            <TableCell>기간</TableCell>
-            <TableCell align="right">신규 회원</TableCell>
-            <TableCell align="right">기존 회원</TableCell>
-            <TableCell align="right">재방문율</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {visitTable.map((row) => (
-            <TableRow
-              key={row.startDay}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {`${row.startDay}-${row.endDay}`}
-              </TableCell>
-              <TableCell align="right">{row.newUser}</TableCell>
-              <TableCell align="right">{row.existingUser}</TableCell>
-              <TableCell align="right">{row.revisitRate.toFixed(1)}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-        <TableHead>
-          <TableRow>
-            <TableCell sx={{width : 100}}>사용자 아이디</TableCell>
-            <TableCell align="right">회원 유형</TableCell>
-            <TableCell align="right" onClick={() => changeTop10FromEvent('view')} sx={{
-                      cursor: 'pointer',
-                      backgroundColor: topType==='view'&&'secondary.main',
-                      '&:hover': {
-                        backgroundColor: 'action.hover',
-                      },
-                    }}>조회</TableCell>
-            <TableCell align="right" onClick={() => changeTop10FromEvent('click')} sx={{
-                      cursor: 'pointer',
-                      backgroundColor: topType==='click'&&'secondary.main',
-                      '&:hover': {
-                        backgroundColor: 'action.hover',
-                      },
-                    }}>방문</TableCell>
-            <TableCell align="right" onClick={() => changeTop10FromEvent('purchase')} sx={{
-                      cursor: 'pointer',
-                      backgroundColor: topType==='purchase'&&'secondary.main',
-                      '&:hover': {
-                        backgroundColor: 'action.hover',
-                      },
-                    }}>구매</TableCell>
-            <TableCell align="right" onClick={() => changeTop10FromEvent('all')} sx={{
-                      cursor: 'pointer',
-                      backgroundColor: topType==='all'&&'secondary.main',
-                      '&:hover': {
-                        backgroundColor: 'action.hover',
-                      },
-                    }}>총 이벤트량</TableCell>
-            <TableCell align="right" sx={{minWidth : 200}}>Bar</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {top10.map((row) => (
-            <TableRow
-              key={row.user_id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.user_id}
-              </TableCell>
-              <TableCell align="right">{row.type}</TableCell>
-              <TableCell align="right">{row.view}</TableCell>
-              <TableCell align="right">{row.click}</TableCell>
-              <TableCell align="right">{row.purchase}</TableCell>
-              <TableCell align="right">{row.event}</TableCell>
-              <TableCell align="right">
-                <Box
-                  sx={{
-                    width: `${(row.bar / maxLength) * 100}%`,
-                    height: 10,
-                    borderRadius: 1,
-                    bgcolor: 'primary.main'
-                  }}
-                />
-                </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <div className='gap'>
+      <div className='wrap-center'>
+        <div className='top-line'>
+          <KPI
+            title={'총 사용자 수'}
+            value={userCnt}
+          />
+          <KPI
+            title={'기간 내 사용자 수'}
+            value={userListInDate.length}
+          />
+        </div>
+      </div>
+      <div className='grid-column'>
+        <Card className='card'>
+          <div className='title'>
+            신규 / 재방문 추이
+          </div>
+          <AreaChartGraph
+            data={userChart}
+          />
+        </Card>
+        <Card className='card'>
+          <div className='title'>
+            재방문율 테이블 (주별)
+          </div>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>기간</TableCell>
+                  <TableCell align="right">신규 회원</TableCell>
+                  <TableCell align="right">기존 회원</TableCell>
+                  <TableCell align="right">재방문율</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {visitTable.map((row) => (
+                  <TableRow
+                    key={row.startDay}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {`${row.startDay}-${row.endDay}`}
+                    </TableCell>
+                    <TableCell align="right">{row.newUser}</TableCell>
+                    <TableCell align="right">{row.existingUser}</TableCell>
+                    <TableCell align="right">{row.revisitRate.toFixed(1)}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Card>
+      </div>
+      <div className='grid-column'>
+        <Card className='card'>
+          <div className='title'>
+            상위 사용자 TOP 10
+          </div>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 0 }} size="small" aria-label="a dense table">
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{width : 100}}>사용자 아이디</TableCell>
+                  <TableCell align="right">회원 유형</TableCell>
+                  <TableCell align="right" onClick={() => changeTop10FromEvent('view')} sx={{
+                            cursor: 'pointer',
+                            backgroundColor: topType==='view'&&'secondary.main',
+                            '&:hover': {
+                              backgroundColor: 'action.hover',
+                            },
+                          }}>조회</TableCell>
+                  <TableCell align="right" onClick={() => changeTop10FromEvent('click')} sx={{
+                            cursor: 'pointer',
+                            backgroundColor: topType==='click'&&'secondary.main',
+                            '&:hover': {
+                              backgroundColor: 'action.hover',
+                            },
+                          }}>방문</TableCell>
+                  <TableCell align="right" onClick={() => changeTop10FromEvent('purchase')} sx={{
+                            cursor: 'pointer',
+                            backgroundColor: topType==='purchase'&&'secondary.main',
+                            '&:hover': {
+                              backgroundColor: 'action.hover',
+                            },
+                          }}>구매</TableCell>
+                  <TableCell align="right" onClick={() => changeTop10FromEvent('all')} sx={{
+                            cursor: 'pointer',
+                            backgroundColor: topType==='all'&&'secondary.main',
+                            '&:hover': {
+                              backgroundColor: 'action.hover',
+                            },
+                          }}>총 이벤트량</TableCell>
+                  <TableCell align="right" sx={{minWidth : 100}}>Bar</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {top10.map((row) => (
+                  <TableRow
+                    key={row.user_id}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.user_id}
+                    </TableCell>
+                    <TableCell align="right">{row.type}</TableCell>
+                    <TableCell align="right">{row.view}</TableCell>
+                    <TableCell align="right">{row.click}</TableCell>
+                    <TableCell align="right">{row.purchase}</TableCell>
+                    <TableCell align="right">{row.event}</TableCell>
+                    <TableCell align="right">
+                      <Box
+                        sx={{
+                          width: `${(row.bar / maxLength) * 100}%`,
+                          height: 10,
+                          borderRadius: 1,
+                          bgcolor: 'primary.main'
+                        }}
+                      />
+                      </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Card>
+      </div>
+    </div>
   </div>
   );
 };
 
 export default User;
+const T_Row = styled.div`
+  display: flex;
+`
+const Card = styled.div`
+  background-color: ${({ theme }) => theme.colors.card};
+  border-color: ${({ theme }) => theme.colors.border};
+`

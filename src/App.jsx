@@ -3,7 +3,7 @@ import './App.css';
 import User from './pages/Users/User.jsx';
 import Overview from './pages/Overview/Overview';
 import Event from './pages/Events/Event.jsx';
-import Sidebar from './pages/Sidebar/Sidebar';
+import Sidebar from './pages/Outbox/Sidebar.jsx';
 import List from './pages/Shop/List.jsx';
 import Detail from './pages/Shop/Detail.jsx';
 import { BrowserRouter, Route, Router, Routes } from 'react-router-dom';
@@ -18,6 +18,7 @@ import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import {  baseTheme, lightTheme, darkTheme  } from './styles/tokens.js';
 import { createStyledTheme } from './styles/styledTheme.js';
 import { createMuiTheme } from './styles/muiTheme.js';
+import Header from './pages/Outbox/Header.jsx';
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
           <GlobalStyle />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Sidebar onToggleTheme={toggleTheme} isDark={isDark} />
+          <Header/>
           <Center>
             <Routes>
               <Route path="/" element={<Overview />} />
